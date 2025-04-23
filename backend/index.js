@@ -14,7 +14,7 @@ app.use(express.json());
 
 connectDB();
 
-app.get("/test", (req, res) => {
+app.get("/", (req, res) => {
   res.send("Funciona /");
 });
 

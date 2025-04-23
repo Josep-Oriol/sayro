@@ -1,18 +1,15 @@
 import express from "express";
+import { getAllUsers, createUser } from "../controllers/users.controller.js";
 
 const route = express.Router();
 
-route.get("/", (req, res) => {
-  res.send("router get users");
-});
+route.get("/", getAllUsers);
 
 route.get("/:id", (req, res) => {
   res.send(`router get user ${req.id}`);
 });
 
-route.post("/", (req, res) => {
-  res.send("router post users");
-});
+route.post("/", createUser);
 
 route.patch("/:id", (req, res) => {
   res.send(`router patch user ${req.id}`);
