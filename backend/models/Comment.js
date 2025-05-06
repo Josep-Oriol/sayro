@@ -12,7 +12,7 @@ const commentSchema = new mongoose.Schema(
     },
     likes: { type: Number, default: 0 },
   },
-  { timestamps: true }
+  { timestamps: true, collation: "comments" }
 );
 
 export default mongoose.model("Comment", commentSchema);
