@@ -1,12 +1,12 @@
 import Nav from "../components/Nav";
 
-function Blog() {
+function Profile() {
   return (
     <>
       <Nav />
-      <h1>Blog</h1>
+      <h1>Profile</h1>
     </>
   );
 }
 
-export default Blog;
+export default Profile;

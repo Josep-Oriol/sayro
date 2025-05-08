@@ -44,7 +44,9 @@ function Nav() {
   return (
     <nav className="bg-dark-surface text-dark-light px-6 py-4 shadow-md">
       <div className="flex justify-between items-center">
-        <div className="text-xl font-bold text-dark-gold">Sayro</div>
+        <Link to="/" className="text-xl font-bold text-dark-gold">
+          Sayro
+        </Link>
 
         <button
           className="md:hidden"
@@ -57,9 +59,6 @@ function Nav() {
         <div className="hidden md:flex gap-6 font-semibold">
           <Link to="/" className="hover:text-dark-gold transition-colors">
             Home
-          </Link>
-          <Link to="/blog" className="hover:text-dark-gold transition-colors">
-            Blog
           </Link>
           <Link to="/about" className="hover:text-dark-gold transition-colors">
             About
@@ -76,13 +75,6 @@ function Nav() {
             onClick={() => setIsOpen(false)}
           >
             Home
-          </Link>
-          <Link
-            to="/blog"
-            className="hover:text-dark-gold"
-            onClick={() => setIsOpen(false)}
-          >
-            Blog
           </Link>
           <Link
             to="/about"
