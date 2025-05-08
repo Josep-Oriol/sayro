@@ -1,12 +1,13 @@
-import Nav from "../components/Nav";
+import { useState } from "react";
 import Input from "../components/utils/Input";
 import Button from "../components/utils/Button";
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import Nav from "../components/Nav";
+import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
-function Login() {
+function Register() {
   const [form, setForm] = useState({
+    username: "",
     email: "",
     password: "",
   });
@@ -23,7 +24,7 @@ function Login() {
     e.preventDefault();
 
     try {
-      const res = await fetch("http://localhost:3000/api/auth/login", {
+      const res = await fetch("http://localhost:3000/api/auth/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -35,13 +36,13 @@ function Login() {
       const data = await res.json();
 
       if (!res.ok) {
-        throw new Error(data.message || "Error al iniciar sesión");
+        throw new Error(data.message || "Error al registrarse");
       }
 
       setIsAuthenticated(true);
       navigate("/");
     } catch (err) {
-      console.error("Error en login:", err.message);
+      console.error("Error en registro:", err.message);
     }
   };
 
@@ -51,11 +52,20 @@ function Login() {
       <main className="min-h-screen bg-dark-background flex items-center justify-center px-4">
         <form
           onSubmit={handleSubmit}
-          className="bg-dark-surface p-8 rounded-xl shadow-lg w-full max-w-sm space-y-6"
+          className="bg-dark-surface p-8 rounded-xl shadow-lg w-full max-w-md space-y-6"
         >
           <h1 className="text-2xl font-bold text-dark-gold text-center">
-            Iniciar sesión
+            Crear cuenta
           </h1>
+
+          <Input
+            label="Nombre de usuario"
+            name="username"
+            type="text"
+            value={form.username}
+            onChange={handleChange}
+            placeholder="TuNombre"
+          />
 
           <Input
             label="Correo electrónico"
@@ -72,17 +82,17 @@ function Login() {
             type="password"
             value={form.password}
             onChange={handleChange}
-            placeholder="********"
+            placeholder="••••••••"
           />
 
           <Button type="submit" className="w-full">
-            Entrar
+            Registrarse
           </Button>
 
           <p className="text-center mt-4 text-sm text-dark-light">
-            ¿No tienes una cuenta?{" "}
-            <Link to="/register" className="text-dark-gold font-semibold">
-              Regístrate
+            ¿Ya tienes una cuenta?{" "}
+            <Link to="/login" className="text-dark-gold font-semibold">
+              Entra
             </Link>
           </p>
         </form>
@@ -91,4 +101,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default Register;

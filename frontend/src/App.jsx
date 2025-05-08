@@ -1,11 +1,11 @@
 import "./App.css";
-import { useEffect } from "react";
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 
 import Home from "./pages/Home";
 import Blog from "./pages/Blog";
 import About from "./pages/About";
 import Login from "./pages/Login";
+import Register from "./pages/Register";
 
 function App() {
   return (
@@ -15,6 +15,7 @@ function App() {
         <Route path="/blog" element={<Blog />} />
         <Route path="/about" element={<About />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
       </Routes>
     </BrowserRouter>
   );
