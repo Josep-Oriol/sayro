@@ -20,8 +20,39 @@ function Register() {
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
+  const passwordRequirements = [
+    {
+      label: "Al menos 8 caracteres",
+      test: (password) => password.length >= 8,
+    },
+    {
+      label: "Una letra mayúscula",
+      test: (password) => /[A-Z]/.test(password),
+    },
+    {
+      label: "Una letra minúscula",
+      test: (password) => /[a-z]/.test(password),
+    },
+    { label: "Un número", test: (password) => /\d/.test(password) },
+    {
+      label: "Un carácter especial",
+      test: (password) => /[!@#$%^&*(),.?":{}|<>]/.test(password),
+    },
+  ];
+
+  const isFormValid = () => {
+    const isUsernameValid = form.username.trim() !== "";
+    const isEmailValid = /\S+@\S+\.\S+/.test(form.email);
+    const isPasswordValid = passwordRequirements.every((req) =>
+      req.test(form.password)
+    );
+    return isUsernameValid && isEmailValid && isPasswordValid;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    //if (!isFormValid()) return;
 
     try {
       const res = await fetch("http://localhost:3000/api/auth/register", {
@@ -85,7 +116,35 @@ function Register() {
             placeholder="••••••••"
           />
 
-          <Button type="submit" className="w-full">
+          <ul className="text-sm space-y-1 pl-1">
+            {passwordRequirements.map((req, index) => {
+              const isValid = req.test(form.password);
+              return (
+                <li key={index} className="flex items-center gap-2">
+                  <span
+                    className={isValid ? "text-green-500" : "text-gray-400"}
+                  >
+                    {isValid ? "✅" : "❌"}
+                  </span>
+                  <span
+                    className={isValid ? "text-green-500" : "text-gray-400"}
+                  >
+                    {req.label}
+                  </span>
+                </li>
+              );
+            })}
+          </ul>
+
+          <Button
+            type="submit"
+            className={`w-full ${
+              !isFormValid()
+                ? "opacity-50 cursor-not-allowed"
+                : "cursor-pointer"
+            }`}
+            disabled={!isFormValid()}
+          >
             Registrarse
           </Button>
 
