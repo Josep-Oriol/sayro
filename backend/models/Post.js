@@ -4,7 +4,7 @@ const postSchema = new mongoose.Schema(
   {
     title: { type: String, required: true },
     description: { type: String, required: true },
-    content: { type: String },
+    content: { type: String, required: true },
     author: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
@@ -13,7 +13,6 @@ const postSchema = new mongoose.Schema(
     tags: [{ type: String }],
     published: { type: Boolean, default: false },
     thumbnail: { type: String },
-    content: [],
     likes: { type: Number, default: 0 },
     comments: [{ type: mongoose.Schema.Types.ObjectId, ref: "Comment" }],
   },

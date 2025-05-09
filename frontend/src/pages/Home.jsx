@@ -37,9 +37,8 @@ function Home() {
   return (
     <>
       <Nav />
-      <h1>Home</h1>
       <div className="container mx-auto py-8">
-        <h1 className="text-2xl font-bold mb-4">Post recientes</h1>
+        <h1 className="text-2xl font-bold mb-4">Recent Posts</h1>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {posts.map((post) => (
             <Post key={post._id} post={post} />
