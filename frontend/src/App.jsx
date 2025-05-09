@@ -6,9 +6,9 @@ import Profile from "./pages/Profile";
 import About from "./pages/About";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-import { Plus } from "lucide-react";
 import CreatePost from "./pages/CreatePost";
 import ViewPost from "./pages/ViewPost";
+import Stats from "./pages/Stats";
 
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -24,6 +24,7 @@ function App() {
         <Route path="/profile" element={<Profile />} />
         <Route path="/create-post" element={<CreatePost />} />
         <Route path="/view-post/:id" element={<ViewPost />} />
+        <Route path="/stats" element={<Stats />} />
       </Routes>
 
       <ToastContainer

@@ -102,6 +102,7 @@ export const unlikePost = async (req, res) => {
 export const recentPosts = async (req, res) => {
   try {
     const posts = await Post.find({ published: true })
+      .populate("author")
       .sort({ createdAt: -1 })
       .limit(8);
     res.json(posts);
