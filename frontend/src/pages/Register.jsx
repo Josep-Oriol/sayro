@@ -4,6 +4,7 @@ import Button from "../components/utils/Button";
 import Nav from "../components/Nav";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { toast } from "react-toastify";
 
 function Register() {
   const [form, setForm] = useState({
@@ -52,7 +53,10 @@ function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    //if (!isFormValid()) return;
+    if (!isFormValid()) {
+      toast.warning("Por favor, completa todos los campos correctamente.");
+      return;
+    }
 
     try {
       const res = await fetch("http://localhost:3000/api/auth/register", {
@@ -70,10 +74,11 @@ function Register() {
         throw new Error(data.message || "Error al registrarse");
       }
 
+      toast.success("Cuenta creada con éxito");
       setIsAuthenticated(true);
       navigate("/");
     } catch (err) {
-      console.error("Error en registro:", err.message);
+      toast.error(err.message || "Error al registrarse");
     }
   };
 

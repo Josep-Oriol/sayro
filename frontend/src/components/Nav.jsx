@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Menu, X } from "lucide-react";
+import { Menu, X, User } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
+import { toast } from "react-toastify";
 
 function Nav() {
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
-  const { isAuthenticated, setIsAuthenticated } = useAuth();
+  const { isAuthenticated, setIsAuthenticated, user } = useAuth();
 
   const handleLogout = async (e) => {
     e.preventDefault();
@@ -18,25 +19,82 @@ function Nav() {
       });
 
       if (res.ok) {
+        toast.success("Sesión cerrada correctamente");
         setIsAuthenticated(false);
         navigate("/");
       }
     } catch (err) {
+      toast.error("Error al cerrar sesión");
       console.error("Error al cerrar sesión:", err.message);
     }
   };
 
-  const AuthLinks = () =>
+  const DesktopAuthLinks = () =>
     isAuthenticated ? (
-      <Link
-        to="/logout"
-        onClick={handleLogout}
-        className="hover:text-dark-gold transition-colors"
-      >
-        Logout
-      </Link>
+      <div className="relative group">
+        <button className="hover:text-dark-gold transition-colors flex gap-2 items-center">
+          <User className="h-5 w-5" />
+          {user?.username || "Usuario"}
+          <span>⌄</span>
+        </button>
+
+        <div className="absolute right-0 top-8 bottom-full mb-2 w-44 bg-dark-background text-sm rounded shadow-lg opacity-0 group-hover:opacity-100 transition-opacity z-50">
+          <Link to="/profile" className="block px-4 py-2 hover:bg-dark-surface">
+            Perfil
+          </Link>
+          <Link to="/stats" className="block px-4 py-2 hover:bg-dark-surface">
+            Estadísticas
+          </Link>
+          <button
+            onClick={handleLogout}
+            className="w-full text-left px-4 py-2 hover:bg-red-600 text-red-400"
+          >
+            Cerrar sesión
+          </button>
+        </div>
+      </div>
     ) : (
       <Link to="/login" className="hover:text-dark-gold transition-colors">
+        Login
+      </Link>
+    );
+
+  const MobileAuthLinks = () =>
+    isAuthenticated ? (
+      <div className="flex flex-col gap-1">
+        <span className="text-dark-gold font-semibold">
+          {user?.username || "Usuario"}
+        </span>
+        <Link
+          to="/profile"
+          className="hover:text-dark-gold"
+          onClick={() => setIsOpen(false)}
+        >
+          Perfil
+        </Link>
+        <Link
+          to="/stats"
+          className="hover:text-dark-gold"
+          onClick={() => setIsOpen(false)}
+        >
+          Estadísticas
+        </Link>
+        <button
+          onClick={(e) => {
+            handleLogout(e);
+            setIsOpen(false);
+          }}
+          className="text-left hover:text-red-500"
+        >
+          Cerrar sesión
+        </button>
+      </div>
+    ) : (
+      <Link
+        to="/login"
+        className="hover:text-dark-gold transition-colors"
+        onClick={() => setIsOpen(false)}
+      >
         Login
       </Link>
     );
@@ -56,14 +114,14 @@ function Nav() {
           {isOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
 
-        <div className="hidden md:flex gap-6 font-semibold">
+        <div className="hidden md:flex gap-6 font-semibold items-center">
           <Link to="/" className="hover:text-dark-gold transition-colors">
             Home
           </Link>
           <Link to="/about" className="hover:text-dark-gold transition-colors">
             About
           </Link>
-          <AuthLinks />
+          <DesktopAuthLinks />
         </div>
       </div>
 
@@ -83,9 +141,7 @@ function Nav() {
           >
             About
           </Link>
-          <div onClick={() => setIsOpen(false)}>
-            <AuthLinks />
-          </div>
+          <MobileAuthLinks />
         </div>
       )}
     </nav>

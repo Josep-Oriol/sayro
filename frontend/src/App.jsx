@@ -1,23 +1,41 @@
-import "./App.css";
-import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
+import "./index.css";
+import { Routes, Route } from "react-router-dom";
 
 import Home from "./pages/Home";
 import Profile from "./pages/Profile";
 import About from "./pages/About";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import { Plus } from "lucide-react";
+import CreatePost from "./pages/CreatePost";
+
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   return (
-    <BrowserRouter>
+    <>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/create-post" element={<CreatePost />} />
       </Routes>
-    </BrowserRouter>
+
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop
+        closeOnClick
+        pauseOnFocusLoss
+        pauseOnHover
+        draggable
+        theme="dark"
+      />
+    </>
   );
 }
 

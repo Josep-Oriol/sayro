@@ -4,17 +4,33 @@ export const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
     fetch("http://localhost:3000/api/auth/user", {
       credentials: "include",
     })
-      .then((res) => setIsAuthenticated(res.ok))
-      .catch(() => setIsAuthenticated(false));
+      .then(async (res) => {
+        if (!res.ok) {
+          setIsAuthenticated(false);
+          setUser(null);
+          return;
+        }
+
+        const data = await res.json();
+        setIsAuthenticated(true);
+        setUser(data.user);
+      })
+      .catch(() => {
+        setIsAuthenticated(false);
+        setUser(null);
+      });
   }, []);
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, setIsAuthenticated }}>
+    <AuthContext.Provider
+      value={{ isAuthenticated, setIsAuthenticated, user, setUser }}
+    >
       {children}
     </AuthContext.Provider>
   );

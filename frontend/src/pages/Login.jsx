@@ -4,6 +4,7 @@ import Button from "../components/utils/Button";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { toast } from "react-toastify";
 
 function Login() {
   const [form, setForm] = useState({
@@ -35,12 +36,15 @@ function Login() {
       const data = await res.json();
 
       if (!res.ok) {
+        toast.error("Error al iniciar sesión");
         throw new Error(data.message || "Error al iniciar sesión");
       }
 
       setIsAuthenticated(true);
+      toast.success("Inicio de sesión exitoso");
       navigate("/");
     } catch (err) {
+      toast.error("Error en login");
       console.error("Error en login:", err.message);
     }
   };
