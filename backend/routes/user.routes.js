@@ -1,9 +1,20 @@
 import express from "express";
-import { getAllUsers } from "../controllers/users.controller.js";
+import {
+  getAllUsers,
+  toggleLikePost,
+  savePost,
+  unsavePost,
+} from "../controllers/users.controller.js";
 
 const route = express.Router();
 
 route.get("/", getAllUsers);
+
+route.patch("/:userId/like/:postId", toggleLikePost);
+
+route.patch("/:userId/save/:postId", savePost);
+
+route.patch("/:userId/unsave/:postId", unsavePost);
 
 route.get("/:id", (req, res) => {
   res.send(`router get user ${req.id}`);

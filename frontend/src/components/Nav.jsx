@@ -38,7 +38,7 @@ function Nav() {
           <span>⌄</span>
         </button>
 
-        <div className="absolute right-0 top-8 bottom-full mb-2 w-44 bg-dark-background text-sm rounded shadow-lg opacity-0 group-hover:opacity-100 transition-opacity z-50">
+        <div className="absolute right-0 top-full mt-2 w-44 bg-dark-background text-sm rounded shadow-lg invisible group-hover:visible opacity-0 group-hover:opacity-100 transition-all duration-200 z-50">
           <Link to="/profile" className="block px-4 py-2 hover:bg-dark-surface">
             Perfil
           </Link>

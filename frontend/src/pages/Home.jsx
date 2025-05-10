@@ -1,13 +1,17 @@
 import Nav from "../components/Nav";
 import { useState, useEffect } from "react";
-import Post from "../components/CardPost";
+import CardPost from "../components/CardPost";
 import { useAuth } from "../context/AuthContext";
 import { toast } from "react-toastify";
-import { Plus } from "lucide-react";
+import { Plus, Search, TrendingUp, Clock } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import Footer from "../components/Footer";
 
 function Home() {
   const [posts, setPosts] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [sortBy, setSortBy] = useState("recent");
+  const [categories, setCategories] = useState([]);
   const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
 
@@ -27,35 +31,142 @@ function Home() {
     }
   };
 
-  useEffect(() => {
-    fetch("http://localhost:3000/api/posts/recent")
+  const handleSearch = (e) => {
+    e.preventDefault();
+    fetchPosts(sortBy, searchTerm);
+  };
+
+  const handleSortChange = (value) => {
+    setSortBy(value);
+    fetchPosts(value, searchTerm);
+  };
+
+  const fetchPosts = (sort = sortBy, query = "") => {
+    const baseUrl =
+      sort === "popular"
+        ? "http://localhost:3000/api/posts/popular"
+        : "http://localhost:3000/api/posts/recent";
+
+    const url = query ? `${baseUrl}?q=${encodeURIComponent(query)}` : baseUrl;
+
+    fetch(url)
       .then((res) => res.json())
       .then((data) => setPosts(data))
       .catch((err) => console.error(err));
+  };
+
+  const fetchPopularTags = () => {
+    fetch("http://localhost:3000/api/tags/popular")
+      .then((res) => res.json())
+      .then((data) => setCategories(data))
+      .catch((err) => console.error(err));
+  };
+
+  useEffect(() => {
+    fetchPosts();
+  }, []);
+
+  useEffect(() => {
+    fetchPopularTags();
   }, []);
 
   return (
     <>
       <Nav />
-      <div className="container mx-auto py-8">
-        <h1 className="text-2xl font-bold mb-4">Recent Posts</h1>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="container mx-auto py-8 px-4 md:px-8">
+        <div className="text-center mb-12">
+          <h1 className="text-4xl md:text-5xl font-bold mb-4 text-dark-gold">
+            Descubre los mejores diseños
+          </h1>
+          <p className="text-lg text-dark-light mb-8">
+            Explora trabajos de los diseñadores más talentosos y experimentados
+            <br />
+            listos para colaborar en tu próximo proyecto
+          </p>
+
+          <div className="max-w-3xl mx-auto mb-8">
+            <div className="flex flex-col md:flex-row gap-4">
+              {/* Selector de ordenamiento */}
+              <div className="flex md:w-1/4">
+                <div className="relative w-full">
+                  <select
+                    value={sortBy}
+                    onChange={(e) => handleSortChange(e.target.value)}
+                    className="w-full py-3 px-4 rounded-lg border border-dark-border bg-dark-background text-dark-light focus:outline-none focus:ring-2 focus:ring-dark-accent focus:border-dark-accent appearance-none"
+                  >
+                    <option value="recent">Más recientes</option>
+                    <option value="popular">Más gustados</option>
+                  </select>
+                  <div className="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
+                    {sortBy === "popular" ? (
+                      <TrendingUp className="h-5 w-5 text-dark-gold" />
+                    ) : (
+                      <Clock className="h-5 w-5 text-dark-gold" />
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              {/* Buscador */}
+              <form
+                onSubmit={handleSearch}
+                className="flex items-center md:w-3/4"
+              >
+                <div className="relative w-full">
+                  <input
+                    type="text"
+                    placeholder="¿Qué estás buscando?"
+                    className="w-full py-3 px-4 pr-10 rounded-l-lg border border-dark-border bg-dark-background text-dark-light focus:outline-none focus:ring-2 focus:ring-dark-accent focus:border-dark-accent"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                  />
+                </div>
+                <button
+                  type="submit"
+                  className="bg-dark-forest text-dark-gold py-3 px-6 rounded-r-lg hover:bg-dark-forest/80 transition"
+                >
+                  <Search className="w-5 h-5" />
+                </button>
+              </form>
+            </div>
+          </div>
+
+          {/* Tags populares */}
+          <div className="flex flex-wrap justify-center gap-3">
+            {categories.map((category, index) => (
+              <button
+                key={index}
+                className="bg-dark-background hover:bg-dark-accent/30 text-dark-light px-4 py-2 rounded-full text-sm transition"
+                onClick={() => {
+                  setSearchTerm(category.name);
+                  fetchPosts(sortBy, category.name);
+                }}
+              >
+                {category.name}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {posts.map((post) => (
-            <Post key={post._id} post={post} />
+            <CardPost key={post._id} post={post} />
           ))}
         </div>
       </div>
+
       {isAuthenticated && (
         <div className="fixed right-10 bottom-10 flex items-center justify-center z-50">
           <button
             onClick={handlePlusClick}
-            className="bg-white text-black p-4 rounded-full shadow-lg hover:bg-gray-200 transition"
-            aria-label="Ir a registro"
+            className="bg-dark-forest text-dark-gold p-4 rounded-full shadow-lg hover:bg-dark-forest/80 transition"
+            aria-label="Crear post"
           >
             <Plus className="w-6 h-6" />
           </button>
         </div>
       )}
+      <Footer />
     </>
   );
 }

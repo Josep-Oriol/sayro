@@ -2,6 +2,8 @@ import User from "../models/User.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
+import { registerEmail } from "../controllers/email.controller.js";
+
 export const register = async (req, res) => {
   try {
     let { username, email, password } = req.body;
@@ -25,6 +27,9 @@ export const register = async (req, res) => {
 
     const newUser = new User({ username, email, password: hashedPassword });
     await newUser.save();
+
+    // Python registerEmail
+    //await registerEmail(email, username);
 
     return res.status(201).json({ message: "Usuario creado correctamente" });
   } catch (err) {

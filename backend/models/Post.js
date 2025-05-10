@@ -10,7 +10,11 @@ const postSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
-    tags: [{ type: String }],
+    tags: {
+      type: [{ type: mongoose.Schema.Types.ObjectId, ref: "Tag" }],
+      default: [],
+    },
+
     published: { type: Boolean, default: false },
     thumbnail: { type: String },
     likes: { type: Number, default: 0 },

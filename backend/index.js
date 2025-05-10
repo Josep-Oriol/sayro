@@ -9,6 +9,7 @@ import usersRouter from "./routes/user.routes.js";
 import commentRouter from "./routes/comment.routes.js";
 import authRouter from "./routes/auth.routes.js";
 import postRouter from "./routes/post.routes.js";
+import tagRouter from "./routes/tag.routes.js";
 
 dotenv.config();
 
@@ -31,6 +32,7 @@ app.get("/", (req, res) => {
 
 app.use("/api/users", usersRouter);
 app.use("/api/posts", postRouter);
+app.use("/api/tags", tagRouter);
 app.use("/api/comment", commentRouter);
 app.use("/api/auth", authRouter);
 

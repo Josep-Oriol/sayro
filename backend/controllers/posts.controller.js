@@ -13,7 +13,7 @@ export const getAllPosts = async (req, res) => {
 export const getPostById = async (req, res) => {
   try {
     const { id } = req.params;
-    const post = await Post.findById(id).populate("author");
+    const post = await Post.findById(id).populate("author").populate("tags");
     if (!post) {
       return res.status(404).json({ error: "Post no encontrado" });
     }
@@ -63,39 +63,25 @@ export const deletePost = async (req, res) => {
   }
 };
 
-export const likePost = async (req, res) => {
+export const getPostsByAuthor = async (req, res) => {
   try {
-    const { id } = req.params;
-    const post = await Post.findByIdAndUpdate(
-      id,
-      { $inc: { likes: 1 } },
-      { new: true }
-    );
-    if (!post) {
-      return res.status(404).json({ error: "Post no encontrado" });
-    }
-    res.json(post);
+    const { authorId } = req.params;
+    const posts = await Post.find({ author: authorId });
+    res.json(posts);
   } catch (err) {
-    console.log(`Error al dar like al post, error: ${err}`);
-    res.status(500).json({ error: "Error al dar like al post" });
+    console.log(`Error al obtener los posts, error: ${err}`);
+    res.status(500).json({ error: "Error al obtener los posts" });
   }
 };
 
-export const unlikePost = async (req, res) => {
+export const getPostsByTag = async (req, res) => {
   try {
-    const { id } = req.params;
-    const post = await Post.findByIdAndUpdate(
-      id,
-      { $inc: { likes: -1 } },
-      { new: true }
-    );
-    if (!post) {
-      return res.status(404).json({ error: "Post no encontrado" });
-    }
-    res.json(post);
+    const { tagId } = req.params;
+    const posts = await Post.find({ tags: tagId });
+    res.json(posts);
   } catch (err) {
-    console.log(`Error al quitar like al post, error: ${err}`);
-    res.status(500).json({ error: "Error al quitar like al post" });
+    console.log(`Error al obtener los posts, error: ${err}`);
+    res.status(500).json({ error: "Error al obtener los posts" });
   }
 };
 
@@ -103,7 +89,21 @@ export const recentPosts = async (req, res) => {
   try {
     const posts = await Post.find({ published: true })
       .populate("author")
+      .populate("tags")
       .sort({ createdAt: -1 })
+      .limit(8);
+    res.json(posts);
+  } catch (err) {
+    console.log(`Error al obtener los posts, error: ${err}`);
+    res.status(500).json({ error: "Error al obtener los posts" });
+  }
+};
+
+export const popularPosts = async (req, res) => {
+  try {
+    const posts = await Post.find({ published: true })
+      .populate("author")
+      .sort({ likes: -1 })
       .limit(8);
     res.json(posts);
   } catch (err) {
