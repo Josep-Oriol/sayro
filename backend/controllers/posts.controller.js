@@ -110,7 +110,9 @@ export const getPostsByAuthor = async (req, res) => {
 export const getPostsByTag = async (req, res) => {
   try {
     const { tagId } = req.params;
-    const posts = await Post.find({ tags: tagId });
+    const posts = await Post.find({ tags: tagId })
+      .populate("author")
+      .populate("tags");
     res.json(posts);
   } catch (err) {
     console.log(`Error al obtener los posts, error: ${err}`);
