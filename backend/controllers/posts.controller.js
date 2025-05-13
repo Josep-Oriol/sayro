@@ -57,11 +57,20 @@ export const createPost = async (req, res) => {
 export const updatePost = async (req, res) => {
   try {
     const { id } = req.params;
-    const post = await Post.findByIdAndUpdate(id, req.body, { new: true });
+    const { title, description, content, published } = req.body;
+    const tags = JSON.parse(req.body.tags || "[]");
+    const thumbnail = req.file ? `/uploads/${req.file.filename}` : null;
+    const author = req.user.id;
+
+    const post = await Post.findByIdAndUpdate(
+      id,
+      { title, description, content, published, tags, thumbnail, author },
+      { new: true }
+    );
     if (!post) {
       return res.status(404).json({ error: "Post no encontrado" });
     }
-    res.json(post);
+    res.json({ message: "Post actualizado correctamente", post });
   } catch (err) {
     console.log(`Error al actualizar el post, error: ${err}`);
     res.status(500).json({ error: "Error al actualizar el post" });
@@ -86,8 +95,10 @@ export const deletePost = async (req, res) => {
 // Obtener posts por autor
 export const getPostsByAuthor = async (req, res) => {
   try {
-    const { authorId } = req.params;
-    const posts = await Post.find({ author: authorId });
+    const authorId = req.user.id;
+    const posts = await Post.find({ author: authorId })
+      .populate("author")
+      .populate("tags");
     res.json(posts);
   } catch (err) {
     console.log(`Error al obtener los posts, error: ${err}`);

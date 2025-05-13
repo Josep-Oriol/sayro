@@ -11,6 +11,7 @@ import {
   deletePost,
   recentPosts,
   popularPosts,
+  getPostsByAuthor,
 } from "../controllers/posts.controller.js";
 
 import { verifyToken } from "../controllers/auth.controller.js";
@@ -40,6 +41,7 @@ route.get("/", getAllPosts);
 route.get("/recent", recentPosts);
 route.get("/popular", popularPosts);
 route.get("/:id", getPostById);
+route.get("/profile/my-posts/", verifyToken, getPostsByAuthor);
 
 // Ruta para crear un post con imagen
 route.post("/", verifyToken, upload.single("thumbnail"), createPost);
