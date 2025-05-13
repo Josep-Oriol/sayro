@@ -119,7 +119,7 @@ function ViewPost() {
           {post.thumbnail && (
             <div className="relative w-full h-80">
               <img
-                src={post.thumbnail}
+                src={"http://localhost:3000" + post.thumbnail}
                 alt={post.title}
                 className="w-full h-full object-cover"
               />

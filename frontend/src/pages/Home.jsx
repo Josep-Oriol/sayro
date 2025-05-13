@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import { Plus, Search, TrendingUp, Clock } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import Footer from "../components/Footer";
+import { web } from "../utils/routes";
 
 function Home() {
   const [posts, setPosts] = useState([]);
@@ -44,8 +45,8 @@ function Home() {
   const fetchPosts = (sort = sortBy, query = "") => {
     const baseUrl =
       sort === "popular"
-        ? "http://localhost:3000/api/posts/popular"
-        : "http://localhost:3000/api/posts/recent";
+        ? `${web}/api/posts/popular`
+        : `${web}/api/posts/recent`;
 
     const url = query ? `${baseUrl}?q=${encodeURIComponent(query)}` : baseUrl;
 
@@ -56,7 +57,7 @@ function Home() {
   };
 
   const fetchPopularTags = () => {
-    fetch("http://localhost:3000/api/tags/popular")
+    fetch(`${web}/api/tags/popular`)
       .then((res) => res.json())
       .then((data) => setCategories(data))
       .catch((err) => console.error(err));

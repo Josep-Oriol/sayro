@@ -33,6 +33,7 @@ export const createPost = async (req, res) => {
     const { title, description, content, published } = req.body;
     const tags = JSON.parse(req.body.tags || "[]");
     const thumbnail = req.file ? `/uploads/${req.file.filename}` : null;
+    const author = req.user.id;
 
     const post = new Post({
       title,
@@ -41,6 +42,7 @@ export const createPost = async (req, res) => {
       published: published === "true",
       tags,
       thumbnail,
+      author,
     });
 
     await post.save();

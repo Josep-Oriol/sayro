@@ -3,6 +3,7 @@ import { Heart, ThumbsUp, MessageCircle } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
 import { toast } from "react-toastify";
+import { web } from "../utils/routes";
 
 function CardPost({ post }) {
   const { user } = useAuth();
@@ -27,7 +28,7 @@ function CardPost({ post }) {
       return;
     }
 
-    fetch(`http://localhost:3000/api/users/${userId}/like/${post._id}`, {
+    fetch(`${web}/api/users/${userId}/like/${post._id}`, {
       method: "PATCH",
     })
       .then((res) => res.json())
@@ -51,9 +52,9 @@ function CardPost({ post }) {
       >
         {/* Imagen del post */}
         <div className="relative">
-          {post.image && (
+          {post.thumbnail && (
             <img
-              src={post.image}
+              src={`${web}${post.thumbnail}`}
               alt={post.title}
               className="w-full h-48 object-cover"
             />

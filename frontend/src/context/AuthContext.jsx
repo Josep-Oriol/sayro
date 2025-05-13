@@ -18,6 +18,7 @@ export function AuthProvider({ children }) {
         }
 
         const data = await res.json();
+        console.log(data);
         setIsAuthenticated(true);
         setUser(data.user);
       })

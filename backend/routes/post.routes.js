@@ -13,6 +13,8 @@ import {
   popularPosts,
 } from "../controllers/posts.controller.js";
 
+import { verifyToken } from "../controllers/auth.controller.js";
+
 const route = express.Router();
 
 // Conf imagenes
@@ -40,9 +42,9 @@ route.get("/popular", popularPosts);
 route.get("/:id", getPostById);
 
 // Ruta para crear un post con imagen
-route.post("/", upload.single("thumbnail"), createPost);
+route.post("/", verifyToken, upload.single("thumbnail"), createPost);
 
-route.patch("/:id", updatePost);
-route.delete("/:id", deletePost);
+route.patch("/:id", verifyToken, updatePost);
+route.delete("/:id", verifyToken, deletePost);
 
 export default route;
