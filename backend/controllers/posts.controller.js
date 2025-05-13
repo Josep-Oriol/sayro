@@ -1,5 +1,7 @@
 import Post from "../models/Post.js";
+import fs from "fs";
 
+// Obtener todos los posts
 export const getAllPosts = async (req, res) => {
   try {
     const posts = await Post.find();
@@ -10,6 +12,7 @@ export const getAllPosts = async (req, res) => {
   }
 };
 
+// Obtener post por ID
 export const getPostById = async (req, res) => {
   try {
     const { id } = req.params;
@@ -24,17 +27,31 @@ export const getPostById = async (req, res) => {
   }
 };
 
+// Crear un nuevo post
 export const createPost = async (req, res) => {
   try {
-    const post = new Post(req.body);
+    const { title, description, content, published } = req.body;
+    const tags = JSON.parse(req.body.tags || "[]");
+    const thumbnail = req.file ? `/uploads/${req.file.filename}` : null;
+
+    const post = new Post({
+      title,
+      description,
+      content,
+      published: published === "true",
+      tags,
+      thumbnail,
+    });
+
     await post.save();
-    res.json({ message: "Post creado correctamente" });
+    res.status(201).json({ message: "Post creado correctamente", post });
   } catch (err) {
     console.log(`Error al crear el post, error: ${err}`);
     res.status(500).json({ error: "Error al crear el post" });
   }
 };
 
+// Actualizar un post existente
 export const updatePost = async (req, res) => {
   try {
     const { id } = req.params;
@@ -49,6 +66,7 @@ export const updatePost = async (req, res) => {
   }
 };
 
+// Eliminar un post
 export const deletePost = async (req, res) => {
   try {
     const { id } = req.params;
@@ -63,6 +81,7 @@ export const deletePost = async (req, res) => {
   }
 };
 
+// Obtener posts por autor
 export const getPostsByAuthor = async (req, res) => {
   try {
     const { authorId } = req.params;
@@ -74,6 +93,7 @@ export const getPostsByAuthor = async (req, res) => {
   }
 };
 
+// Obtener posts por etiqueta
 export const getPostsByTag = async (req, res) => {
   try {
     const { tagId } = req.params;
@@ -85,6 +105,7 @@ export const getPostsByTag = async (req, res) => {
   }
 };
 
+// Obtener los posts más recientes
 export const recentPosts = async (req, res) => {
   try {
     const posts = await Post.find({ published: true })
@@ -99,6 +120,7 @@ export const recentPosts = async (req, res) => {
   }
 };
 
+// Obtener los posts más populares
 export const popularPosts = async (req, res) => {
   try {
     const posts = await Post.find({ published: true })

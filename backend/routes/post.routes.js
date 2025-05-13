@@ -1,4 +1,8 @@
 import express from "express";
+import multer from "multer";
+import path from "path";
+import fs from "fs";
+
 import {
   getAllPosts,
   getPostById,
@@ -11,18 +15,34 @@ import {
 
 const route = express.Router();
 
+// Conf imagenes
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    const dir = "uploads";
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir);
+    }
+    cb(null, dir);
+  },
+  filename: (req, file, cb) => {
+    const ext = path.extname(file.originalname);
+    const filename = `${Date.now()}-${file.fieldname}${ext}`;
+    cb(null, filename);
+  },
+});
+
+const upload = multer({ storage });
+
+// Rutas de posts
 route.get("/", getAllPosts);
-
 route.get("/recent", recentPosts);
-
 route.get("/popular", popularPosts);
-
 route.get("/:id", getPostById);
 
-route.post("/", createPost);
+// Ruta para crear un post con imagen
+route.post("/", upload.single("thumbnail"), createPost);
 
 route.patch("/:id", updatePost);
-
 route.delete("/:id", deletePost);
 
 export default route;
