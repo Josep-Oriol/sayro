@@ -11,6 +11,7 @@ const commentSchema = new mongoose.Schema(
       default: null,
     },
     likes: { type: Number, default: 0 },
+    edited: { type: Boolean, default: false },
   },
   { timestamps: true, collection: "comments" }
 );

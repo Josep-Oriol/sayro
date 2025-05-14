@@ -1,29 +1,21 @@
 import express from "express";
+import { verifyToken } from "../controllers/auth.controller.js";
+import {
+  createComment,
+  deleteComment,
+  updateComment,
+  isOwner,
+  getAllComments,
+} from "../controllers/comments.controller.js";
 
 const route = express.Router();
 
-route.get("/", (req, res) => {
-  res.send("router get comments");
-});
+route.get("/", getAllComments);
 
-route.get("/:id", (req, res) => {
-  res.send(`router get comment ${req.id}`);
-});
+route.post("/", verifyToken, createComment);
 
-route.post("/", (req, res) => {
-  res.send("router post comment");
-});
+route.patch("/:id", verifyToken, isOwner, updateComment);
 
-route.patch("/:id", (req, res) => {
-  res.send(`router patch comment ${req.id}`);
-});
-
-route.put("/:id", (req, res) => {
-  res.send(`router put comment ${req.id}`);
-});
-
-route.delete("/:id", (req, res) => {
-  res.send(`router delete comment ${req.id}`);
-});
+route.delete("/:id", verifyToken, isOwner, deleteComment);
 
 export default route;

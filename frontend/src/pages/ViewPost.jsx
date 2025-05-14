@@ -12,7 +12,11 @@ import {
   Tag,
 } from "lucide-react";
 import { format } from "date-fns";
+import { useAuth } from "../context/AuthContext";
 import { es } from "date-fns/locale";
+import EditPostBtn from "../components/utils/EditPostBtn";
+import { web } from "../utils/routes.js";
+import { toast } from "react-toastify";
 
 function ViewPost() {
   const { id } = useParams();
@@ -20,10 +24,13 @@ function ViewPost() {
   const [isLiked, setIsLiked] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [isOwner, setIsOwner] = useState(false);
+  const { user } = useAuth();
+  const [likesCount, setLikesCount] = useState(0);
 
   useEffect(() => {
     setIsLoading(true);
-    fetch(`http://localhost:3000/api/posts/${id}`)
+    fetch(`${web}/api/posts/${id}`)
       .then((res) => {
         if (!res.ok) {
           throw new Error("No se pudo cargar el post");
@@ -32,6 +39,8 @@ function ViewPost() {
       })
       .then((data) => {
         setPost(data);
+        setLikesCount(data.likes || 0);
+        setIsOwner(data.author._id === user?._id);
         setIsLoading(false);
       })
       .catch((err) => {
@@ -42,8 +51,34 @@ function ViewPost() {
   }, [id]);
 
   const handleLike = () => {
+    if (!user) {
+      toast.error("Debes iniciar sesión para dar like");
+      return;
+    }
     setIsLiked(!isLiked);
-    // Aquí iría la lógica para enviar el like al servidor
+
+    fetch(`${web}/${user._id}/like/${post._id}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        credentials: "include",
+      },
+    })
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error("No se pudo alternar like");
+        }
+        return res.json();
+      })
+      .then((data) => {
+        console.log(data);
+        setIsLiked(data.liked);
+        setLikesCount(data.likes);
+      })
+      .catch((err) => {
+        console.error(err);
+        setError(err.message);
+      });
   };
 
   if (isLoading) {
@@ -119,7 +154,7 @@ function ViewPost() {
           {post.thumbnail && (
             <div className="relative w-full h-80">
               <img
-                src={"http://localhost:3000" + post.thumbnail}
+                src={`${web}${post.thumbnail}`}
                 alt={post.title}
                 className="w-full h-full object-cover"
               />
@@ -148,7 +183,7 @@ function ViewPost() {
 
                 <div className="flex items-center">
                   <ThumbsUp size={16} className="mr-1" />
-                  <span>{post.likes} likes</span>
+                  <span>{likesCount} likes</span>
                 </div>
 
                 {post.comments && (
@@ -222,6 +257,7 @@ function ViewPost() {
 
         {/* Sección de comentarios */}
         <Comments comments={post.comments} postId={post._id} />
+        {isOwner && <EditPostBtn postId={post._id} />}
       </div>
     </>
   );

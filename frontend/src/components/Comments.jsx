@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
+import { web } from "../utils/routes.js";
+import { toast } from "react-toastify";
 
 function Comments({ comments = [], postId }) {
   const [commentText, setCommentText] = useState("");
@@ -17,11 +19,28 @@ function Comments({ comments = [], postId }) {
     e.preventDefault();
     if (!commentText.trim()) return;
 
-    // Aquí iría la lógica para enviar el comentario al servidor
-    console.log("Enviando comentario:", { postId, content: commentText });
-    
-    // Limpiar el campo después de enviar
-    setCommentText("");
+    fetch(`${web}/api/comment`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        credentials: "include",
+      },
+      body: JSON.stringify({ postId, content: commentText }),
+    })
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error("No se pudo crear el comentario");
+        }
+        return res.json();
+      })
+      .then((data) => {
+        toast.success(data.message);
+        setCommentText("");
+      })
+      .catch((err) => {
+        console.error(err);
+        toast.error(err.message);
+      });
   };
 
   const remainingChars = MAX_COMMENT_LENGTH - commentText.length;
@@ -47,10 +66,14 @@ function Comments({ comments = [], postId }) {
             maxLength={MAX_COMMENT_LENGTH}
           ></textarea>
           <div className="flex justify-between items-center mt-2">
-            <span className={`text-sm ${remainingChars < 50 ? 'text-red-400' : 'text-dark-light/70'}`}>
+            <span
+              className={`text-sm ${
+                remainingChars < 50 ? "text-red-400" : "text-dark-light/70"
+              }`}
+            >
               {remainingChars} caracteres restantes
             </span>
-            <button 
+            <button
               type="submit"
               className="bg-dark-forest text-dark-gold px-6 py-2 rounded-lg hover:bg-dark-forest/80 transition"
               disabled={!commentText.trim()}
@@ -80,11 +103,9 @@ function Comments({ comments = [], postId }) {
                     </h4>
                     <span className="text-xs text-dark-light/50">
                       {comment.createdAt
-                        ? format(
-                            new Date(comment.createdAt),
-                            "d MMM yyyy",
-                            { locale: es }
-                          )
+                        ? format(new Date(comment.createdAt), "d MMM yyyy", {
+                            locale: es,
+                          })
                         : ""}
                     </span>
                   </div>
