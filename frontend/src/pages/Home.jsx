@@ -2,10 +2,11 @@ import Nav from "../components/Nav";
 import { useState, useEffect } from "react";
 import CardPost from "../components/CardPost";
 import { useAuth } from "../context/AuthContext";
-import { Plus, Search, TrendingUp, Clock } from "lucide-react";
+import { Plus, Search, TrendingUp, Clock, X } from "lucide-react";
 import Footer from "../components/Footer";
 import CreatePostBtn from "../components/utils/CreatePostBtn";
 import { web } from "../utils/routes";
+import NoPosts from "../components/NoPosts";
 
 function Home() {
   const [posts, setPosts] = useState([]);
@@ -36,6 +37,8 @@ function Home() {
       .then((res) => res.json())
       .then((data) => setPosts(data))
       .catch((err) => console.error(err));
+
+    console.log(posts);
   };
 
   const fetchPopularTags = () => {
@@ -43,6 +46,16 @@ function Home() {
       .then((res) => res.json())
       .then((data) => setCategories(data))
       .catch((err) => console.error(err));
+  };
+
+  const handleTagClick = (tag) => {
+    setSearchTerm(tag);
+    fetchPosts(sortBy, tag);
+  };
+
+  const handleClearSearch = () => {
+    setSearchTerm("");
+    fetchPosts();
   };
 
   useEffect(() => {
@@ -103,12 +116,21 @@ function Home() {
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                   />
+                  {searchTerm && (
+                    <button
+                      type="button"
+                      onClick={() => setSearchTerm("")}
+                      className="absolute right-0 top-1/2 -translate-y-1/2 bg-dark-forest text-dark-gold py-3 px-4 rounded-r-lg hover:bg-dark-forest/80 transition"
+                    >
+                      <X className="w-5 h-5" onClick={handleClearSearch} />
+                    </button>
+                  )}
                 </div>
                 <button
                   type="submit"
                   className="bg-dark-forest text-dark-gold py-3 px-6 rounded-r-lg hover:bg-dark-forest/80 transition"
                 >
-                  <Search className="w-5 h-5" />
+                  <Search className="w-5 h-5" onClick={handleSearch} />
                 </button>
               </form>
             </div>
@@ -121,8 +143,7 @@ function Home() {
                 key={index}
                 className="bg-dark-background hover:bg-dark-accent/30 text-dark-light px-4 py-2 rounded-full text-sm transition"
                 onClick={() => {
-                  setSearchTerm(category.name);
-                  fetchPosts(sortBy, category.name);
+                  handleTagClick(category.name);
                 }}
               >
                 {category.name}
@@ -131,11 +152,15 @@ function Home() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {posts.map((post) => (
-            <CardPost key={post._id} post={post} />
-          ))}
-        </div>
+        {posts.length > 0 ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {posts.map((post) => (
+              <CardPost key={post._id} post={post} />
+            ))}
+          </div>
+        ) : (
+          <NoPosts />
+        )}
       </div>
 
       {isAuthenticated && <CreatePostBtn isAuthenticated={isAuthenticated} />}

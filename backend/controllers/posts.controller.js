@@ -123,7 +123,11 @@ export const getPostsByTag = async (req, res) => {
 // Obtener los posts más recientes
 export const recentPosts = async (req, res) => {
   try {
-    const posts = await Post.find({ published: true })
+    const query = req.query.q || "";
+    const posts = await Post.find({
+      published: true,
+      title: { $regex: query, $options: "i" },
+    })
       .populate("author")
       .populate("tags")
       .sort({ createdAt: -1 })
@@ -138,8 +142,13 @@ export const recentPosts = async (req, res) => {
 // Obtener los posts más populares
 export const popularPosts = async (req, res) => {
   try {
-    const posts = await Post.find({ published: true })
+    const query = req.query.q || "";
+    const posts = await Post.find({
+      published: true,
+      title: { $regex: query, $options: "i" },
+    })
       .populate("author")
+      .populate("tags")
       .sort({ likes: -1 })
       .limit(8);
     res.json(posts);
