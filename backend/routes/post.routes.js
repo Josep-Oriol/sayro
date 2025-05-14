@@ -41,6 +41,10 @@ route.get("/", getAllPosts);
 route.get("/recent", recentPosts);
 route.get("/popular", popularPosts);
 route.get("/:id", getPostById);
+route.put("/:id", updatePost);
+route.delete("/:id", deletePost);
+
+// Ruta para obtener los posts de un usuario
 route.get("/profile/my-posts/", verifyToken, getPostsByAuthor);
 
 // Ruta para crear un post con imagen

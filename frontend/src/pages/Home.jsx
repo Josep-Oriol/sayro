@@ -2,10 +2,9 @@ import Nav from "../components/Nav";
 import { useState, useEffect } from "react";
 import CardPost from "../components/CardPost";
 import { useAuth } from "../context/AuthContext";
-import { toast } from "react-toastify";
 import { Plus, Search, TrendingUp, Clock } from "lucide-react";
-import { useNavigate } from "react-router-dom";
 import Footer from "../components/Footer";
+import CreatePostBtn from "../components/utils/CreatePostBtn";
 import { web } from "../utils/routes";
 
 function Home() {
@@ -14,23 +13,6 @@ function Home() {
   const [sortBy, setSortBy] = useState("recent");
   const [categories, setCategories] = useState([]);
   const { isAuthenticated } = useAuth();
-  const navigate = useNavigate();
-
-  const handlePlusClick = () => {
-    if (isAuthenticated) {
-      navigate("/create-post");
-    } else {
-      toast.error("Debes estar logeado para poder crear un post", {
-        position: "top-right",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
-    }
-  };
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -156,17 +138,7 @@ function Home() {
         </div>
       </div>
 
-      {isAuthenticated && (
-        <div className="fixed right-10 bottom-10 flex items-center justify-center z-50">
-          <button
-            onClick={handlePlusClick}
-            className="bg-dark-forest text-dark-gold p-4 rounded-full shadow-lg hover:bg-dark-forest/80 transition"
-            aria-label="Crear post"
-          >
-            <Plus className="w-6 h-6" />
-          </button>
-        </div>
-      )}
+      {isAuthenticated && <CreatePostBtn isAuthenticated={isAuthenticated} />}
       <Footer />
     </>
   );

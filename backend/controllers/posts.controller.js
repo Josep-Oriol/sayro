@@ -148,3 +148,23 @@ export const popularPosts = async (req, res) => {
     res.status(500).json({ error: "Error al obtener los posts" });
   }
 };
+
+export const isAuthor = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const userId = req.user.id;
+
+    const post = await Post.findOne({ _id: id, author: userId });
+
+    if (!post) {
+      return res
+        .status(403)
+        .json({ error: "No tienes permiso para editar este post" });
+    }
+
+    next();
+  } catch (err) {
+    console.error(`Error al verificar el autor del post: ${err}`);
+    res.status(500).json({ error: "Error interno del servidor" });
+  }
+};

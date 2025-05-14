@@ -116,10 +116,10 @@ function Nav() {
 
         <div className="hidden md:flex gap-6 font-semibold items-center">
           <Link to="/" className="hover:text-dark-gold transition-colors">
-            Home
+            Inicio
           </Link>
           <Link to="/about" className="hover:text-dark-gold transition-colors">
-            About
+            Sobre nosotros
           </Link>
           <DesktopAuthLinks />
         </div>
@@ -132,14 +132,14 @@ function Nav() {
             className="hover:text-dark-gold"
             onClick={() => setIsOpen(false)}
           >
-            Home
+            Inicio
           </Link>
           <Link
             to="/about"
             className="hover:text-dark-gold"
             onClick={() => setIsOpen(false)}
           >
-            About
+            Sobre nosotros
           </Link>
           <MobileAuthLinks />
         </div>

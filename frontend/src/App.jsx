@@ -7,6 +7,7 @@ import About from "./pages/About";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import CreatePost from "./pages/CreatePost";
+import EditPost from "./pages/EditPost";
 import ViewPost from "./pages/ViewPost";
 import Stats from "./pages/Stats";
 
@@ -23,6 +24,7 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/create-post" element={<CreatePost />} />
+        <Route path="/edit-post/:id" element={<EditPost />} />
         <Route path="/view-post/:id" element={<ViewPost />} />
         <Route path="/stats" element={<Stats />} />
       </Routes>
