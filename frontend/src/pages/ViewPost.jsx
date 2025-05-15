@@ -1,16 +1,8 @@
 import Nav from "../components/Nav.jsx";
 import Comments from "../components/Comments.jsx";
 import { useParams, Link } from "react-router-dom";
-import { useEffect, useState } from "react";
-import {
-  Heart,
-  ThumbsUp,
-  MessageCircle,
-  Calendar,
-  Clock,
-  User,
-  Tag,
-} from "lucide-react";
+import { useEffect, useState, useRef } from "react";
+import { ThumbsUp, MessageCircle, Calendar, User, Tag } from "lucide-react";
 import { format } from "date-fns";
 import { useAuth } from "../context/AuthContext";
 import { es } from "date-fns/locale";
@@ -27,14 +19,13 @@ function ViewPost() {
   const [isOwner, setIsOwner] = useState(false);
   const { user } = useAuth();
   const [likesCount, setLikesCount] = useState(0);
+  const commentsRef = useRef(null);
 
   useEffect(() => {
     setIsLoading(true);
     fetch(`${web}/api/posts/${id}`)
       .then((res) => {
-        if (!res.ok) {
-          throw new Error("No se pudo cargar el post");
-        }
+        if (!res.ok) throw new Error("No se pudo cargar el post");
         return res.json();
       })
       .then((data) => {
@@ -55,6 +46,7 @@ function ViewPost() {
       toast.error("Debes iniciar sesión para dar like");
       return;
     }
+
     setIsLiked(!isLiked);
 
     fetch(`${web}/api/users/${user._id}/like/${post._id}`, {
@@ -65,13 +57,10 @@ function ViewPost() {
       },
     })
       .then((res) => {
-        if (!res.ok) {
-          throw new Error("No se pudo alternar like");
-        }
+        if (!res.ok) throw new Error("No se pudo alternar like");
         return res.json();
       })
       .then((data) => {
-        console.log(data);
         setIsLiked(data.liked);
         setLikesCount(data.likes);
       })
@@ -79,6 +68,15 @@ function ViewPost() {
         console.error(err);
         setError(err.message);
       });
+  };
+
+  const handleScrollToComments = () => {
+    if (commentsRef.current) {
+      commentsRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }
   };
 
   if (isLoading) {
@@ -149,57 +147,43 @@ function ViewPost() {
     <>
       <Nav />
       <div className="container mx-auto py-8 px-4 max-w-5xl">
-        {/* Cabecera del post */}
         <div className="bg-dark-surface rounded-lg shadow-lg overflow-hidden mb-8">
           {post.thumbnail && (
-            <div className="relative w-full h-80">
+            <div className="relative w-full h-80 overflow-hidden">
               <img
                 src={`${web}${post.thumbnail}`}
                 alt={post.title}
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
               />
+              <div className="absolute inset-0 bg-gradient-to-t from-dark-surface via-transparent to-transparent" />
             </div>
           )}
 
           <div className="p-6 md:p-8">
-            {/* Título y metadatos */}
-            <div className="mb-6">
-              <h1 className="text-3xl md:text-4xl font-bold mb-4 text-dark-gold">
-                {post.title}
-              </h1>
+            <h1 className="text-4xl font-extrabold tracking-tight text-dark-gold mb-4">
+              {post.title}
+            </h1>
 
-              <div className="flex flex-wrap items-center gap-4 text-dark-light/70 text-sm mb-4">
-                <div className="flex items-center">
-                  <Calendar size={16} className="mr-1" />
-                  <span>{formattedDate}</span>
-                </div>
-
-                {post.author && (
-                  <div className="flex items-center">
-                    <User size={16} className="mr-1" />
-                    <span>{post.author.username}</span>
-                  </div>
-                )}
-
-                <div className="flex items-center">
-                  <ThumbsUp size={16} className="mr-1" />
-                  <span>{likesCount} likes</span>
-                </div>
-
-                {post.comments && (
-                  <div className="flex items-center">
-                    <MessageCircle size={16} className="mr-1" />
-                    <span>{post.comments.length} comentarios</span>
-                  </div>
-                )}
-              </div>
-
-              <p className="text-xl text-dark-light font-medium">
-                {post.description}
-              </p>
+            <div className="flex flex-wrap items-center gap-3 text-sm mb-6">
+              <span className="flex items-center bg-dark-background px-3 py-1 rounded-full text-dark-light/70">
+                <Calendar size={16} className="mr-1" /> {formattedDate}
+              </span>
+              <span className="flex items-center bg-dark-background px-3 py-1 rounded-full text-dark-light/70">
+                <User size={16} className="mr-1" /> {post.author.username}
+              </span>
+              <span className="flex items-center bg-dark-background px-3 py-1 rounded-full text-dark-light/70">
+                <ThumbsUp size={16} className="mr-1" /> {likesCount} likes
+              </span>
+              <span className="flex items-center bg-dark-background px-3 py-1 rounded-full text-dark-light/70">
+                <MessageCircle size={16} className="mr-1" />{" "}
+                {post.comments?.length || 0} comentarios
+              </span>
             </div>
 
-            {/* Etiquetas */}
+            <p className="text-lg text-dark-light/90 italic border-l-4 border-dark-gold pl-4 mb-6">
+              {post.description}
+            </p>
+
             {post.tags && post.tags.length > 0 && (
               <div className="mb-6">
                 <h3 className="text-sm font-medium text-dark-light/70 mb-2 flex items-center">
@@ -219,25 +203,23 @@ function ViewPost() {
               </div>
             )}
 
-            {/* Acciones */}
-            <div className="flex items-center space-x-4 border-t border-dark-border pt-4">
+            <div className="flex gap-4 pt-4 border-t border-dark-border mt-6">
               <button
                 onClick={handleLike}
-                className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition ${
+                className={`flex items-center gap-2 px-5 py-2 rounded-full border transition${
                   isLiked
-                    ? "bg-dark-forest/20 text-dark-gold"
-                    : "hover:bg-dark-background text-dark-light"
+                    ? "bg-dark-gold/10 text-dark-gold border-dark-gold"
+                    : "text-dark-light hover:bg-dark-background border-dark-border"
                 }`}
               >
-                <ThumbsUp
-                  size={20}
-                  className={isLiked ? "text-dark-gold" : ""}
-                  fill={isLiked ? "currentColor" : "none"}
-                />
+                <ThumbsUp size={20} fill={isLiked ? "currentColor" : "none"} />
                 <span>{likesCount} Me gusta</span>
               </button>
 
-              <button className="flex items-center space-x-2 px-4 py-2 rounded-lg hover:bg-dark-background text-dark-light transition">
+              <button
+                onClick={handleScrollToComments}
+                className="flex items-center gap-2 px-5 py-2 rounded-full border text-dark-light hover:bg-dark-background transition border-dark-border"
+              >
                 <MessageCircle size={20} />
                 <span>{post.comments?.length || 0} Comentarios</span>
               </button>
@@ -245,18 +227,17 @@ function ViewPost() {
           </div>
         </div>
 
-        {/* Contenido del post */}
         <div className="bg-dark-surface rounded-lg shadow-lg p-6 md:p-8 mb-8">
           <h2 className="text-xl font-bold mb-4 text-dark-gold">Contenido</h2>
-          <div className="prose prose-invert prose-dark-gold max-w-none">
-            <p className="text-dark-light whitespace-pre-line">
-              {post.content}
-            </p>
+          <div className="prose prose-invert prose-lg prose-dark max-w-none text-dark-light whitespace-pre-line">
+            {post.content}
           </div>
         </div>
 
-        {/* Sección de comentarios */}
-        <Comments comments={post.comments} postId={post._id} />
+        <div ref={commentsRef}>
+          <Comments comments={post.comments} postId={post._id} user={user} />
+        </div>
+
         {isOwner && <EditPostBtn postId={post._id} />}
       </div>
     </>

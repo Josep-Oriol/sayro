@@ -82,17 +82,20 @@ export const deleteComment = async (req, res) => {
 
 export const isOwner = async (req, res, next) => {
   try {
-    const { userId } = req.user.id;
+    const userId = req.user.id;
     const { commentId } = req.body;
+
     const comment = await Comment.findById(commentId);
     if (!comment) {
       return res.status(404).json({ error: "Comentario no encontrado" });
     }
-    if (comment.author !== userId) {
+
+    if (comment.author.toString() !== userId) {
       return res
         .status(403)
         .json({ error: "No tienes permiso para editar este comentario" });
     }
+
     next();
   } catch (err) {
     console.log(`Error al verificar el autor del comentario, error: ${err}`);
