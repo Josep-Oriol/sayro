@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
+import { web } from "../utils/routes.js";
 
 export const AuthContext = createContext();
 
@@ -7,7 +8,7 @@ export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    fetch("http://localhost:3000/api/auth/user", {
+    fetch(`${web}/api/auth/user`, {
       credentials: "include",
     })
       .then(async (res) => {

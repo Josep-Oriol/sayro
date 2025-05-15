@@ -13,7 +13,7 @@ function Login() {
   });
 
   const navigate = useNavigate();
-  const { setIsAuthenticated } = useAuth();
+  const { setIsAuthenticated, setUser } = useAuth();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -41,10 +41,22 @@ function Login() {
       }
 
       setIsAuthenticated(true);
+
+      const userRes = await fetch("http://localhost:3000/api/auth/user", {
+        credentials: "include",
+      });
+
+      if (!userRes.ok) {
+        throw new Error("No se pudo obtener los datos del usuario");
+      }
+
+      const userData = await userRes.json();
+      setUser(userData.user);
+
       toast.success("Inicio de sesión exitoso");
       navigate("/");
     } catch (err) {
-      toast.error("Error en login");
+      toast.error("Error al iniciar sesión");
       console.error("Error en login:", err.message);
     }
   };

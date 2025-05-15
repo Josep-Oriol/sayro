@@ -50,16 +50,18 @@ function Comments({ comments = [], postId, user }) {
       })
       .then((data) => {
         toast.success(data.message);
+
         const newComment = {
           content: commentText,
           createdAt: new Date().toISOString(),
-          authorName: user?.username || "Tú",
-          author: { username: user?.username || "Tú" },
+          authorName: user.username,
+          author: user._id,
           _id: data.commentId || Date.now(),
         };
+
         setLocalComments((prev) => [newComment, ...prev]);
         setCommentText("");
-        setVisibleCount((prev) => prev + 1); // mostrar el nuevo
+        setVisibleCount((prev) => prev + 1);
       })
       .catch((err) => {
         console.error(err);

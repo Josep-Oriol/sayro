@@ -31,7 +31,6 @@ function ViewPost() {
       .then((data) => {
         setPost(data);
         setLikesCount(data.likes || 0);
-        setIsOwner(data.author._id === user?._id);
         setIsLoading(false);
       })
       .catch((err) => {
@@ -40,6 +39,13 @@ function ViewPost() {
         setIsLoading(false);
       });
   }, [id]);
+
+  // Edit btn
+  useEffect(() => {
+    if (post && user) {
+      setIsOwner(post.author._id === user._id);
+    }
+  }, [post, user]);
 
   const handleLike = () => {
     if (!user) {
@@ -78,6 +84,10 @@ function ViewPost() {
       });
     }
   };
+
+  const formattedDate = post?.createdAt
+    ? format(new Date(post.createdAt), "d 'de' MMMM 'de' yyyy", { locale: es })
+    : "Fecha desconocida";
 
   if (isLoading) {
     return (
@@ -138,10 +148,6 @@ function ViewPost() {
       </>
     );
   }
-
-  const formattedDate = post.createdAt
-    ? format(new Date(post.createdAt), "d 'de' MMMM 'de' yyyy", { locale: es })
-    : "Fecha desconocida";
 
   return (
     <>
@@ -208,8 +214,8 @@ function ViewPost() {
                 onClick={handleLike}
                 className={`flex items-center gap-2 px-5 py-2 rounded-full border transition${
                   isLiked
-                    ? "bg-dark-gold/10 text-dark-gold border-dark-gold"
-                    : "text-dark-light hover:bg-dark-background border-dark-border"
+                    ? " bg-dark-gold/10 text-dark-gold border-dark-gold"
+                    : " text-dark-light hover:bg-dark-background border-dark-border"
                 }`}
               >
                 <ThumbsUp size={20} fill={isLiked ? "currentColor" : "none"} />
@@ -238,7 +244,7 @@ function ViewPost() {
           <Comments comments={post.comments} postId={post._id} user={user} />
         </div>
 
-        {isOwner && <EditPostBtn postId={post._id} />}
+        {isOwner && <EditPostBtn user={user} id={post._id} />}
       </div>
     </>
   );

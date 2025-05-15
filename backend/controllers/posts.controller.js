@@ -133,8 +133,7 @@ export const recentPosts = async (req, res) => {
     })
       .populate("author")
       .populate("tags")
-      .sort({ createdAt: -1 })
-      .limit(8);
+      .sort({ createdAt: -1 });
     res.json(posts);
   } catch (err) {
     console.log(`Error al obtener los posts, error: ${err}`);
@@ -152,8 +151,7 @@ export const popularPosts = async (req, res) => {
     })
       .populate("author")
       .populate("tags")
-      .sort({ likes: -1 })
-      .limit(8);
+      .sort({ likes: -1 });
     res.json(posts);
   } catch (err) {
     console.log(`Error al obtener los posts, error: ${err}`);

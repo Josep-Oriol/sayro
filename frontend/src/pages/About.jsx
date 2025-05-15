@@ -8,120 +8,100 @@ function About() {
       <Nav />
 
       <main className="flex-grow">
-        {/* Hero Section */}
-        <section className="bg-dark-surface py-16">
-          <div className="container mx-auto px-4 text-center">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4 text-dark-gold">
+        {/* Hero */}
+        <section className="bg-dark-surface py-20 text-center">
+          <div className="container mx-auto px-4">
+            <h1 className="text-5xl font-extrabold text-dark-gold mb-4">
               Sobre Sayro
             </h1>
-            <p className="text-xl text-dark-light max-w-3xl mx-auto">
+            <p className="text-lg text-dark-light max-w-2xl mx-auto">
               Una plataforma para diseñadores y desarrolladores que buscan
-              inspiración y compartir sus mejores trabajos.
+              inspiración, visibilidad y colaboración en proyectos creativos.
             </p>
           </div>
         </section>
 
-        {/* Misión y Visión */}
-        <section className="py-16 bg-dark-background">
-          <div className="container mx-auto px-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-              <div className="bg-dark-surface p-8 rounded-lg shadow-lg">
-                <h2 className="text-2xl font-bold mb-4 text-dark-gold">
-                  Nuestra Misión
-                </h2>
-                <p className="text-dark-light">
-                  Conectar a diseñadores y desarrolladores de todo el mundo,
-                  facilitando el intercambio de ideas y la colaboración en
-                  proyectos innovadores. Buscamos crear una comunidad donde la
-                  creatividad y el talento sean reconocidos y valorados.
-                </p>
-              </div>
-              <div className="bg-dark-surface p-8 rounded-lg shadow-lg">
-                <h2 className="text-2xl font-bold mb-4 text-dark-gold">
-                  Nuestra Visión
-                </h2>
-                <p className="text-dark-light">
-                  Convertirnos en la plataforma de referencia para profesionales
-                  del diseño y desarrollo, donde puedan encontrar inspiración,
-                  compartir conocimientos y establecer conexiones profesionales
-                  que impulsen su carrera.
-                </p>
-              </div>
+        {/* Misión / Visión */}
+        <section className="py-20 bg-dark-background">
+          <div className="container mx-auto px-4 grid grid-cols-1 md:grid-cols-2 gap-10">
+            <div className="bg-dark-surface rounded-xl p-8 shadow-lg hover:shadow-xl transition duration-300">
+              <h2 className="text-2xl font-bold text-dark-gold mb-4">
+                Nuestra Misión
+              </h2>
+              <p className="text-dark-light leading-relaxed">
+                Conectar a diseñadores y desarrolladores de todo el mundo,
+                fomentando la creatividad, el intercambio de ideas y la
+                colaboración en proyectos innovadores.
+              </p>
+            </div>
+            <div className="bg-dark-surface rounded-xl p-8 shadow-lg hover:shadow-xl transition duration-300">
+              <h2 className="text-2xl font-bold text-dark-gold mb-4">
+                Nuestra Visión
+              </h2>
+              <p className="text-dark-light leading-relaxed">
+                Ser la plataforma de referencia donde los profesionales del
+                diseño y desarrollo encuentren oportunidades, visibilidad y
+                comunidad.
+              </p>
             </div>
           </div>
         </section>
 
         {/* Características */}
-        <section className="py-16 bg-dark-surface">
+        <section className="py-20 bg-dark-surface">
           <div className="container mx-auto px-4">
-            <h2 className="text-3xl font-bold mb-12 text-center text-dark-gold">
+            <h2 className="text-3xl font-bold text-center text-dark-gold mb-12">
               ¿Por qué elegir Sayro?
             </h2>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-              <div className="bg-dark-background p-6 rounded-lg text-center">
-                <div className="bg-dark-forest/20 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Palette className="text-dark-gold w-8 h-8" />
+              {[
+                {
+                  icon: <Palette className="text-dark-gold w-8 h-8" />,
+                  title: "Diseños Inspiradores",
+                  desc: "Explora miles de diseños de alta calidad creados por talentosos profesionales.",
+                },
+                {
+                  icon: <Users className="text-dark-gold w-8 h-8" />,
+                  title: "Comunidad Activa",
+                  desc: "Únete a una red vibrante de diseñadores y desarrolladores creativos.",
+                },
+                {
+                  icon: <Code className="text-dark-gold w-8 h-8" />,
+                  title: "Recursos Técnicos",
+                  desc: "Accede a recursos, tutoriales y herramientas que potencian tus habilidades.",
+                },
+                {
+                  icon: <Award className="text-dark-gold w-8 h-8" />,
+                  title: "Reconocimiento",
+                  desc: "Gana visibilidad y construye tu reputación dentro de la comunidad.",
+                },
+              ].map(({ icon, title, desc }, i) => (
+                <div
+                  key={i}
+                  className="bg-dark-background p-6 rounded-lg text-center hover:shadow-md transition"
+                >
+                  <div className="bg-dark-forest/20 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                    {icon}
+                  </div>
+                  <h3 className="text-xl font-semibold mb-2 text-dark-gold">
+                    {title}
+                  </h3>
+                  <p className="text-dark-light text-sm">{desc}</p>
                 </div>
-                <h3 className="text-xl font-semibold mb-2 text-dark-gold">
-                  Diseños Inspiradores
-                </h3>
-                <p className="text-dark-light">
-                  Explora miles de diseños de alta calidad creados por
-                  talentosos profesionales.
-                </p>
-              </div>
-
-              <div className="bg-dark-background p-6 rounded-lg text-center">
-                <div className="bg-dark-forest/20 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Users className="text-dark-gold w-8 h-8" />
-                </div>
-                <h3 className="text-xl font-semibold mb-2 text-dark-gold">
-                  Comunidad Activa
-                </h3>
-                <p className="text-dark-light">
-                  Forma parte de una comunidad de profesionales apasionados por
-                  el diseño y desarrollo.
-                </p>
-              </div>
-
-              <div className="bg-dark-background p-6 rounded-lg text-center">
-                <div className="bg-dark-forest/20 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Code className="text-dark-gold w-8 h-8" />
-                </div>
-                <h3 className="text-xl font-semibold mb-2 text-dark-gold">
-                  Recursos Técnicos
-                </h3>
-                <p className="text-dark-light">
-                  Accede a recursos, tutoriales y herramientas para mejorar tus
-                  habilidades.
-                </p>
-              </div>
-
-              <div className="bg-dark-background p-6 rounded-lg text-center">
-                <div className="bg-dark-forest/20 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Award className="text-dark-gold w-8 h-8" />
-                </div>
-                <h3 className="text-xl font-semibold mb-2 text-dark-gold">
-                  Reconocimiento
-                </h3>
-                <p className="text-dark-light">
-                  Obtén visibilidad y reconocimiento por tus mejores trabajos y
-                  contribuciones.
-                </p>
-              </div>
+              ))}
             </div>
           </div>
         </section>
 
-        {/* Equipo o Historia */}
-        <section className="py-16 bg-dark-background">
-          <div className="container mx-auto px-4 text-center">
-            <h2 className="text-3xl font-bold mb-6 text-dark-gold">
+        {/* Historia */}
+        <section className="py-20 bg-dark-background">
+          <div className="container mx-auto px-4 text-center max-w-3xl">
+            <h2 className="text-3xl font-bold text-dark-gold mb-6">
               Nuestra Historia
             </h2>
-            <p className="text-dark-light max-w-3xl mx-auto mb-8">
-              Sayro nació en 2025 con la idea de crear un espacio donde los
+            <p className="text-dark-light text-base mb-8 leading-relaxed">
+              Sayro nació en 2025 con el objetivo de ser un espacio donde los
               profesionales del diseño pudieran compartir sus trabajos y recibir
               retroalimentación constructiva. Desde entonces, hemos crecido
               hasta convertirnos en una comunidad vibrante con miles de usuarios

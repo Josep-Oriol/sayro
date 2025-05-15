@@ -3,12 +3,12 @@ import { Pencil } from "lucide-react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-function EditPostBtn({ isAuthenticated, idPost }) {
+function EditPostBtn({ user, id }) {
   const navigate = useNavigate();
 
   const handlePlusClick = () => {
-    if (isAuthenticated) {
-      navigate(`/edit-post/${idPost}`);
+    if (user) {
+      navigate(`/edit-post/${id}`);
     } else {
       toast.error("Debes estar logeado para poder editar un post", {
         position: "top-right",
