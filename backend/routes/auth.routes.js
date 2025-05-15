@@ -18,7 +18,9 @@ route.post("/logout", logout);
 
 route.get("/user", verifyToken, async (req, res) => {
   try {
-    const user = await User.findById(req.user.id).select("_id username email");
+    const user = await User.findById(req.user.id).select(
+      "_id username email likedPosts savedPosts"
+    );
     if (!user)
       return res.status(404).json({ message: "Usuario no encontrado" });
 

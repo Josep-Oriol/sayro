@@ -19,16 +19,17 @@ function Comments({ comments = [], postId }) {
     e.preventDefault();
     if (!commentText.trim()) return;
 
-    fetch(`${web}/api/comment`, {
+    fetch(`${web}/api/comments`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        credentials: "include",
       },
+      credentials: "include",
       body: JSON.stringify({ postId, content: commentText }),
     })
       .then((res) => {
         if (!res.ok) {
+          toast.error("Debes iniciar sesión para comentar");
           throw new Error("No se pudo crear el comentario");
         }
         return res.json();
@@ -51,7 +52,7 @@ function Comments({ comments = [], postId }) {
         Comentarios ({comments?.length || 0})
       </h2>
 
-      {/* Formulario de comentarios - Ahora está encima de la lista */}
+      {/* Formulario de comentarios */}
       <div className="mb-8 border-b border-dark-border pb-6">
         <h3 className="text-lg font-medium mb-4 text-dark-gold">
           Deja un comentario
@@ -99,7 +100,7 @@ function Comments({ comments = [], postId }) {
                 <div>
                   <div className="flex items-baseline">
                     <h4 className="font-medium text-dark-gold mr-2">
-                      {comment.author?.username || "Usuario"}
+                      {comment.authorName || "Usuario"}
                     </h4>
                     <span className="text-xs text-dark-light/50">
                       {comment.createdAt

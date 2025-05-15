@@ -44,7 +44,7 @@ app.get("/", (req, res) => {
 app.use("/api/users", usersRouter);
 app.use("/api/posts", postRouter);
 app.use("/api/tags", tagRouter);
-app.use("/api/comment", commentRouter);
+app.use("/api/comments", commentRouter);
 app.use("/api/auth", authRouter);
 
 // Server on port

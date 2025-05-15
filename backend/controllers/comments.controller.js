@@ -1,4 +1,5 @@
 import Comment from "../models/Comment.js";
+import Post from "../models/Post.js";
 
 export const getAllComments = async (req, res) => {
   try {
@@ -12,14 +13,23 @@ export const getAllComments = async (req, res) => {
 
 export const createComment = async (req, res) => {
   try {
-    const { userId } = req.user.id;
+    const userId = req.user.id;
+    const username = req.user.username;
     const { postId, content } = req.body;
+
     const comment = new Comment({
       content,
       author: userId,
       post: postId,
+      authorName: username,
     });
+
     await comment.save();
+
+    await Post.findByIdAndUpdate(postId, {
+      $push: { comments: comment._id },
+    });
+
     res.status(201).json({
       success: true,
       message: "Comentario creado exitosamente",

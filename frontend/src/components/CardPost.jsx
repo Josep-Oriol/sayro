@@ -12,12 +12,11 @@ function CardPost({ post }) {
   const [isLiked, setIsLiked] = useState(false);
   const [likesCount, setLikesCount] = useState(post.likes || 0);
 
-  // Inicializa isLiked si `post.likedBy` está disponible (opcional)
   useEffect(() => {
-    if (post.likedBy?.includes(userId)) {
+    if (user?.likedPosts?.some((likedPostId) => likedPostId === post._id)) {
       setIsLiked(true);
     }
-  }, [post.likedBy, userId]);
+  }, [user?.likedPosts, post._id]);
 
   const handleLiked = (e) => {
     e.preventDefault();
@@ -30,6 +29,7 @@ function CardPost({ post }) {
 
     fetch(`${web}/api/users/${userId}/like/${post._id}`, {
       method: "PATCH",
+      credentials: "include",
     })
       .then((res) => res.json())
       .then((data) => {

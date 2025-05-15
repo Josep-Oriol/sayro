@@ -16,7 +16,10 @@ export const getAllPosts = async (req, res) => {
 export const getPostById = async (req, res) => {
   try {
     const { id } = req.params;
-    const post = await Post.findById(id).populate("author").populate("tags");
+    const post = await Post.findById(id)
+      .populate("author")
+      .populate("tags")
+      .populate("comments");
     if (!post) {
       return res.status(404).json({ error: "Post no encontrado" });
     }

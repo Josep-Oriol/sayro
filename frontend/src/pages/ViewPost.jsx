@@ -57,7 +57,7 @@ function ViewPost() {
     }
     setIsLiked(!isLiked);
 
-    fetch(`${web}/${user._id}/like/${post._id}`, {
+    fetch(`${web}/api/users/${user._id}/like/${post._id}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
@@ -234,7 +234,7 @@ function ViewPost() {
                   className={isLiked ? "text-dark-gold" : ""}
                   fill={isLiked ? "currentColor" : "none"}
                 />
-                <span>{post.likes || 0} Me gusta</span>
+                <span>{likesCount} Me gusta</span>
               </button>
 
               <button className="flex items-center space-x-2 px-4 py-2 rounded-lg hover:bg-dark-background text-dark-light transition">
