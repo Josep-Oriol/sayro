@@ -62,11 +62,12 @@ export const updateUser = async (req, res) => {
 
 export const deleteUser = async (req, res) => {
   try {
-    const { id } = req.params;
-    const deletedUser = await User.findByIdAndDelete(id);
+    const authorId = req.user.id;
+    const deletedUser = await User.findByIdAndDelete(authorId);
     if (!deletedUser) {
       return res.status(404).json({ error: "Usuario no encontrado" });
     }
+    res.clearCookie("token");
     res.json({ message: "Usuario eliminado correctamente" });
   } catch (err) {
     console.log(`Error al eliminar el usuario, error: ${err}`);

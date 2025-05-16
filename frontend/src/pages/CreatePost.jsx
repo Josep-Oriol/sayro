@@ -1,8 +1,12 @@
-import Nav from "../components/Nav.jsx";
+import Nav from "../components/Nav";
 import { useState } from "react";
 import { X } from "lucide-react";
+import { web } from "../utils/routes.js";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 function CreatePost() {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -79,7 +83,7 @@ function CreatePost() {
     }
 
     try {
-      const response = await fetch("http://localhost:3000/api/posts", {
+      const response = await fetch(`${web}/api/posts`, {
         method: "POST",
         body: data,
         credentials: "include",
@@ -101,6 +105,8 @@ function CreatePost() {
       setThumbnail(null);
       setThumbnailPreview(null);
       setTagInput("");
+      toast.success("Post creado correctamente");
+      navigate("/");
     } catch (err) {
       console.error(err);
       alert("Error al crear el post");

@@ -23,10 +23,13 @@ function EditPostBtn({ user, id }) {
   };
 
   return (
-    <div className="fixed right-10 bottom-10 flex items-center justify-center z-50">
+    <div
+      title="Editar Post"
+      className="fixed right-10 bottom-10 flex items-center justify-center z-50"
+    >
       <button
         onClick={handlePlusClick}
-        className="bg-dark-forest text-dark-gold p-4 rounded-full shadow-lg hover:bg-dark-forest/80 transition"
+        className="bg-dark-forest text-dark-gold p-4 rounded-full shadow-lg hover:bg-dark-forest/80 transition cursor-pointer"
         aria-label="Crear post"
       >
         <Pencil className="w-6 h-6" />

@@ -12,6 +12,7 @@ import {
   recentPosts,
   popularPosts,
   getPostsByAuthor,
+  isAuthor,
 } from "../controllers/posts.controller.js";
 
 import { verifyToken } from "../controllers/auth.controller.js";
@@ -36,13 +37,11 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-// Rutas de posts
+// Rutas de posts /api/posts
 route.get("/", getAllPosts);
 route.get("/recent", recentPosts);
 route.get("/popular", popularPosts);
 route.get("/:id", getPostById);
-route.put("/:id", updatePost);
-route.delete("/:id", deletePost);
 
 // Ruta para obtener los posts de un usuario
 route.get("/profile/my-posts/", verifyToken, getPostsByAuthor);
@@ -51,6 +50,6 @@ route.get("/profile/my-posts/", verifyToken, getPostsByAuthor);
 route.post("/", verifyToken, upload.single("thumbnail"), createPost);
 
 route.patch("/:id", verifyToken, updatePost);
-route.delete("/:id", verifyToken, deletePost);
+route.delete("/:id", verifyToken, isAuthor, deletePost);
 
 export default route;

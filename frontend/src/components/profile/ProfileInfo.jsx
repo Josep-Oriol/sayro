@@ -8,10 +8,12 @@ import { toast } from "react-toastify";
 function ProfileInfo({ user }) {
   const { setUser, setIsAuthenticated } = useAuth();
   const navigate = useNavigate();
+  const secureMessage = `Deseo eliminar ${user.username}`;
+  const messageDeleteAccount = `Si deseas eliminar tu cuenta escribe "${secureMessage}"`;
 
   const handleDeleteAccount = () => {
     if (confirm("¿Seguro que quieres eliminar tu cuenta?")) {
-      fetch(`/api/users/${user._id}`, {
+      fetch(`${web}/api/users/delete`, {
         method: "DELETE",
         credentials: "include",
       })

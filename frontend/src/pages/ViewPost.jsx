@@ -1,14 +1,18 @@
-import Nav from "../components/Nav.jsx";
-import Comments from "../components/Comments.jsx";
+import Nav from "../components/Nav";
+import Comments from "../components/Comments";
 import { useParams, Link } from "react-router-dom";
 import { useEffect, useState, useRef } from "react";
 import { ThumbsUp, MessageCircle, Calendar, User, Tag } from "lucide-react";
 import { format } from "date-fns";
 import { useAuth } from "../context/AuthContext";
 import { es } from "date-fns/locale";
-import EditPostBtn from "../components/utils/EditPostBtn";
+import EditPostBtn from "../components/utils/post/EditPostBtn";
 import { web } from "../utils/routes.js";
 import { toast } from "react-toastify";
+import DeletePostBtn from "../components/utils/post/DeletePostBtn";
+import IsLoadingPost from "../components/utils/post/IsLoadingPost";
+import ErrorPost from "../components/utils/post/ErrorPost";
+import NoPost from "../components/utils/post/NoPost";
 
 function ViewPost() {
   const { id } = useParams();
@@ -89,65 +93,10 @@ function ViewPost() {
     ? format(new Date(post.createdAt), "d 'de' MMMM 'de' yyyy", { locale: es })
     : "Fecha desconocida";
 
-  if (isLoading) {
-    return (
-      <>
-        <Nav />
-        <div className="container mx-auto py-8 px-4">
-          <div className="bg-dark-surface p-8 rounded-lg shadow-lg animate-pulse">
-            <div className="h-64 bg-dark-background rounded-lg mb-6"></div>
-            <div className="h-8 bg-dark-background rounded w-3/4 mb-4"></div>
-            <div className="h-4 bg-dark-background rounded w-1/2 mb-6"></div>
-            <div className="h-32 bg-dark-background rounded mb-6"></div>
-          </div>
-        </div>
-      </>
-    );
-  }
-
-  if (error) {
-    return (
-      <>
-        <Nav />
-        <div className="container mx-auto py-8 px-4">
-          <div className="bg-dark-surface p-8 rounded-lg shadow-lg text-center">
-            <h2 className="text-2xl font-bold text-red-500 mb-4">Error</h2>
-            <p className="text-dark-light mb-6">{error}</p>
-            <Link
-              to="/"
-              className="bg-dark-forest text-dark-gold px-6 py-2 rounded-lg hover:bg-dark-forest/80 transition"
-            >
-              Volver al inicio
-            </Link>
-          </div>
-        </div>
-      </>
-    );
-  }
-
-  if (!post) {
-    return (
-      <>
-        <Nav />
-        <div className="container mx-auto py-8 px-4">
-          <div className="bg-dark-surface p-8 rounded-lg shadow-lg text-center">
-            <h2 className="text-2xl font-bold text-dark-gold mb-4">
-              Post no encontrado
-            </h2>
-            <p className="text-dark-light mb-6">
-              El post que buscas no existe o ha sido eliminado.
-            </p>
-            <Link
-              to="/"
-              className="bg-dark-forest text-dark-gold px-6 py-2 rounded-lg hover:bg-dark-forest/80 transition"
-            >
-              Volver al inicio
-            </Link>
-          </div>
-        </div>
-      </>
-    );
-  }
+  // Errores posibles
+  if (isLoading) return <IsLoadingPost />;
+  if (error) return <ErrorPost error={error} />;
+  if (!post) return <NoPost />;
 
   return (
     <>
@@ -244,7 +193,12 @@ function ViewPost() {
           <Comments comments={post.comments} postId={post._id} user={user} />
         </div>
 
-        {isOwner && <EditPostBtn user={user} id={post._id} />}
+        {isOwner && (
+          <>
+            <DeletePostBtn postId={post._id} />
+            <EditPostBtn user={user} id={post._id} />
+          </>
+        )}
       </div>
     </>
   );

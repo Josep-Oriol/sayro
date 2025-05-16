@@ -101,7 +101,7 @@ export const deletePost = async (req, res) => {
     if (!post) {
       return res.status(404).json({ error: "Post no encontrado" });
     }
-    res.json({ message: "Post eliminado correctamente" });
+    res.json({ success: true, message: "Post eliminado correctamente" });
   } catch (err) {
     console.log(`Error al eliminar el post, error: ${err}`);
     res.status(500).json({ error: "Error al eliminar el post" });

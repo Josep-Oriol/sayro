@@ -167,7 +167,7 @@ function Home() {
         )}
       </div>
 
-      {isAuthenticated && <CreatePostBtn />}
+      {isAuthenticated && <CreatePostBtn isAuthenticated={isAuthenticated} />}
       <Footer />
     </>
   );

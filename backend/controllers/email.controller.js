@@ -16,23 +16,27 @@ export const registerEmail = async (email, username) => {
 
     let output = "";
 
-    pythonProcess.stderr.on("data", (data) => {
-      console.error(`STDERR desde Python: ${data.toString()}`);
-    });
+    try {
+      pythonProcess.stderr.on("data", (data) => {
+        console.error(`STDERR desde Python: ${data.toString()}`);
+      });
 
-    pythonProcess.stdout.on("data", (data) => {
-      console.log(`STDOUT desde Python: ${data.toString()}`);
-      output += data.toString();
-    });
+      pythonProcess.stdout.on("data", (data) => {
+        console.log(`STDOUT desde Python: ${data.toString()}`);
+        output += data.toString();
+      });
 
-    pythonProcess.on("close", (code) => {
-      if (code === 0) {
-        console.log(`Respuesta Script Python: ${output.trim()}`);
-        resolve(output.trim());
-      } else {
-        console.error(`Error al enviar el correo a: ${email}`);
-        reject(new Error("Error en el script de Python"));
-      }
-    });
+      pythonProcess.on("close", (code) => {
+        if (code === 0) {
+          console.log(`Respuesta Script Python: ${output.trim()}`);
+          resolve(output.trim());
+        } else {
+          console.error(`Error al enviar el correo a: ${email}`);
+          reject(new Error("Error en el script de Python"));
+        }
+      });
+    } catch (error) {
+      console.log(error);
+    }
   });
 };

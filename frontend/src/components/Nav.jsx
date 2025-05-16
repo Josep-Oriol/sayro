@@ -74,13 +74,6 @@ function Nav() {
                   >
                     Perfil
                   </Link>
-                  <Link
-                    to="/stats"
-                    className="block px-4 py-2 hover:bg-dark-surface"
-                    onClick={() => setUserMenuOpen(false)}
-                  >
-                    Estadísticas
-                  </Link>
                   <button
                     onClick={(e) => {
                       handleLogout(e);
@@ -131,13 +124,6 @@ function Nav() {
                 onClick={() => setIsOpen(false)}
               >
                 Perfil
-              </Link>
-              <Link
-                to="/stats"
-                className="hover:text-dark-gold block"
-                onClick={() => setIsOpen(false)}
-              >
-                Estadísticas
               </Link>
               <button
                 onClick={(e) => {

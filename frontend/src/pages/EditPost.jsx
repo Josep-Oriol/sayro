@@ -1,4 +1,4 @@
-import Nav from "../components/Nav.jsx";
+import Nav from "../components/Nav";
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { X } from "lucide-react";

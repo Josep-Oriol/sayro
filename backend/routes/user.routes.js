@@ -4,7 +4,9 @@ import {
   toggleLikePost,
   savePost,
   unsavePost,
+  deleteUser,
 } from "../controllers/users.controller.js";
+import { verifyToken } from "../controllers/auth.controller.js";
 
 const route = express.Router();
 
@@ -15,6 +17,8 @@ route.patch("/:userId/like/:postId", toggleLikePost);
 route.patch("/:userId/save/:postId", savePost);
 
 route.patch("/:userId/unsave/:postId", unsavePost);
+
+route.delete("/delete", verifyToken, deleteUser);
 
 route.get("/:id", (req, res) => {
   res.send(`router get user ${req.id}`);
