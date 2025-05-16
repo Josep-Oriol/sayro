@@ -4,7 +4,20 @@ import fs from "fs";
 // Obtener todos los posts
 export const getAllPosts = async (req, res) => {
   try {
-    const posts = await Post.find();
+    const { sortBy, q } = req.query;
+
+    const query = {};
+    if (q) {
+      query.title = { $regex: q, $options: "i" };
+    }
+
+    let sort = {};
+    if (sortBy === "recent") sort = { createdAt: -1 };
+    else if (sortBy === "old") sort = { createdAt: 1 };
+
+    const posts = await Post.find(query)
+      .sort(sort)
+      .populate("author", "username");
     res.json(posts);
   } catch (err) {
     console.log(`Error al obtener los posts, error: ${err}`);

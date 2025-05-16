@@ -3,10 +3,29 @@ import Post from "../models/Post.js";
 
 export const getAllComments = async (req, res) => {
   try {
-    const comments = await Comment.find();
+    const { q, sortBy } = req.query;
+
+    const query = {};
+
+    if (q) {
+      query.content = { $regex: q, $options: "i" };
+    }
+
+    let sort = {};
+    if (sortBy === "recent") {
+      sort = { createdAt: -1 };
+    } else if (sortBy === "old") {
+      sort = { createdAt: 1 };
+    }
+
+    const comments = await Comment.find(query)
+      .sort(sort)
+      .populate("author", "username")
+      .populate("post", "title");
+
     res.json(comments);
   } catch (err) {
-    console.log(`Error al obtener los comentarios, error: ${err}`);
+    console.error(`Error al obtener los comentarios, error: ${err}`);
     res.status(500).json({ error: "Error al obtener los comentarios" });
   }
 };

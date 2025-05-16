@@ -9,7 +9,13 @@ import Register from "./pages/Register";
 import CreatePost from "./pages/CreatePost";
 import EditPost from "./pages/EditPost";
 import ViewPost from "./pages/ViewPost";
-import Stats from "./pages/Stats";
+
+{
+  /* Admin */
+}
+import ViewUsers from "./pages/admin/ViewUsers";
+import ViewPosts from "./pages/admin/ViewPosts";
+import ViewComments from "./pages/admin/ViewComments";
 
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -25,8 +31,10 @@ function App() {
         <Route path="/profile" element={<Profile />} />
         <Route path="/create-post" element={<CreatePost />} />
         <Route path="/edit-post/:id" element={<EditPost />} />
+        <Route path="/users" element={<ViewUsers />} />
+        <Route path="/posts" element={<ViewPosts />} />
+        <Route path="/comments" element={<ViewComments />} />
         <Route path="/view-post/:id" element={<ViewPost />} />
-        <Route path="/stats" element={<Stats />} />
       </Routes>
 
       <ToastContainer

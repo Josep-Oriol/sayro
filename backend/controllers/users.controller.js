@@ -3,10 +3,29 @@ import Post from "../models/Post.js";
 
 export const getAllUsers = async (req, res) => {
   try {
-    const users = await User.find();
+    const { sortBy, q } = req.query;
+
+    const query = {};
+
+    if (q) {
+      query.$or = [
+        { name: { $regex: q, $options: "i" } },
+        { email: { $regex: q, $options: "i" } },
+      ];
+    }
+
+    // Ordenamiento
+    let sort = {};
+    if (sortBy === "recent") {
+      sort = { createdAt: -1 };
+    } else if (sortBy === "old") {
+      sort = { createdAt: 1 };
+    }
+
+    const users = await User.find(query).sort(sort);
     res.json(users);
   } catch (err) {
-    console.log(`Error al obtener los usuarios, error: ${err}`);
+    console.error(`Error al obtener los usuarios: ${err}`);
     res.status(500).json({ error: "Error al obtener los usuarios" });
   }
 };
