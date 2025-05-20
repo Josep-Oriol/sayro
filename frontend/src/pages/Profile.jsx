@@ -4,7 +4,7 @@ import Footer from "../components/Footer";
 import { useAuth } from "../context/AuthContext";
 import ProfileInfo from "../components/profile/ProfileInfo";
 import LikedPosts from "../components/profile/LikedPosts";
-import SavedPosts from "../components/profile/SavedPosts";
+import MisPosts from "../components/profile/MisPosts";
 
 function Profile() {
   const { user } = useAuth();
@@ -47,7 +47,7 @@ function Profile() {
                   : "hover:bg-dark-background"
               }`}
             >
-              Guardados
+              Mis posts
             </button>
           </div>
         </aside>
@@ -56,7 +56,7 @@ function Profile() {
         <section className="flex-1">
           {section === "profile" && <ProfileInfo user={user} />}
           {section === "likes" && <LikedPosts user={user} />}
-          {section === "saved" && <SavedPosts user={user} />}
+          {section === "saved" && <MisPosts />}
         </section>
       </div>
       <Footer />

@@ -42,6 +42,7 @@ route.get("/", getAllPosts);
 route.get("/recent", recentPosts);
 route.get("/popular", popularPosts);
 route.get("/:id", getPostById);
+route.get("my-posts", verifyToken, getPostsByAuthor);
 
 // Ruta para obtener los posts de un usuario
 route.get("/profile/my-posts/", verifyToken, getPostsByAuthor);
@@ -49,7 +50,8 @@ route.get("/profile/my-posts/", verifyToken, getPostsByAuthor);
 // Ruta para crear un post con imagen
 route.post("/", verifyToken, upload.single("thumbnail"), createPost);
 
-route.patch("/:id", verifyToken, updatePost);
+route.patch("/:id", verifyToken, upload.single("thumbnail"), updatePost);
+
 route.delete("/:id", verifyToken, isAuthor, deletePost);
 
 export default route;

@@ -46,14 +46,20 @@ export const getUserById = async (req, res) => {
 
 export const updateUser = async (req, res) => {
   try {
-    const { id } = req.params;
-    const updatedUser = await User.findByIdAndUpdate(id, req.body, {
-      new: true,
-    });
+    const userId = req.user.id;
+    const { username, email } = req.body;
+
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      { username, email },
+      { new: true }
+    );
+
     if (!updatedUser) {
       return res.status(404).json({ error: "Usuario no encontrado" });
     }
-    res.json(updatedUser);
+
+    res.json({ message: "Usuario actualizado correctamente", updatedUser });
   } catch (err) {
     console.log(`Error al actualizar el usuario, error: ${err}`);
     res.status(500).json({ error: "Error al actualizar el usuario" });

@@ -9,6 +9,9 @@ import Register from "./pages/Register";
 import CreatePost from "./pages/CreatePost";
 import EditPost from "./pages/EditPost";
 import ViewPost from "./pages/ViewPost";
+import EditProfile from "./pages/EditProfile";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
 
 {
   /* Admin */
@@ -35,6 +38,9 @@ function App() {
         <Route path="/posts" element={<ViewPosts />} />
         <Route path="/comments" element={<ViewComments />} />
         <Route path="/view-post/:id" element={<ViewPost />} />
+        <Route path="/edit-profile" element={<EditProfile />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
       </Routes>
 
       <ToastContainer

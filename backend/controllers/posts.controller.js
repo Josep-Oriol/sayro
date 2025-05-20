@@ -1,4 +1,5 @@
 import Post from "../models/Post.js";
+import Tag from "../models/Tag.js";
 import fs from "fs";
 
 // Obtener todos los posts
@@ -74,22 +75,54 @@ export const updatePost = async (req, res) => {
   try {
     const { id } = req.params;
     const { title, description, content, published } = req.body;
-    const tags = JSON.parse(req.body.tags || "[]");
-    const thumbnail = req.file ? `/uploads/${req.file.filename}` : null;
     const author = req.user.id;
 
-    const post = await Post.findByIdAndUpdate(
-      id,
-      { title, description, content, published, tags, thumbnail, author },
-      { new: true }
-    );
-    if (!post) {
+    const tagNames = JSON.parse(req.body.tags || "[]");
+
+    // Buscar el post actual
+    const existingPost = await Post.findById(id);
+    if (!existingPost) {
       return res.status(404).json({ error: "Post no encontrado" });
     }
-    res.json({ message: "Post actualizado correctamente", post });
+
+    const thumbnail = req.file
+      ? `/uploads/${req.file.filename}`
+      : existingPost.thumbnail;
+
+    // Buscar o crear las etiquetas
+    const tagIds = [];
+    for (const name of tagNames) {
+      const tagName = name.toLowerCase();
+      let tag = await Tag.findOne({ name: tagName });
+
+      if (!tag) {
+        tag = new Tag({ name: tagName });
+        await tag.save();
+      }
+
+      tagIds.push(tag._id);
+    }
+
+    const updatedPost = await Post.findByIdAndUpdate(
+      id,
+      {
+        title,
+        description,
+        content,
+        published,
+        tags: tagIds,
+        thumbnail,
+        author,
+      },
+      { new: true }
+    ).populate("tags");
+
+    res.json({ message: "Post actualizado correctamente", post: updatedPost });
   } catch (err) {
-    console.log(`Error al actualizar el post, error: ${err}`);
-    res.status(500).json({ error: "Error al actualizar el post" });
+    console.error("Error al actualizar el post:", err);
+    res
+      .status(500)
+      .json({ error: err.message || "Error al actualizar el post" });
   }
 };
 

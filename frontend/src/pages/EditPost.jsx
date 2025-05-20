@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { X } from "lucide-react";
 import { web } from "../utils/routes.js";
+import { toast } from "react-toastify";
 
 function EditPost() {
   const { id } = useParams();
@@ -28,7 +29,7 @@ function EditPost() {
         const response = await fetch(`${web}/api/posts/${id}`);
         if (!response.ok) throw new Error("Error al obtener el post");
         const data = await response.json();
-        console.log(data);
+
         setFormData({
           title: data.title,
           description: data.description,
@@ -65,17 +66,28 @@ function EditPost() {
   };
 
   const addTag = (tag) => {
-    if (!tags.includes(tag) && tag.trim() !== "") {
-      setTags([...tags, tag]);
+    const tagName = tag.toLowerCase();
+    const exists = tags.some(
+      (t) => (typeof t === "string" ? t : t.name) === tagName
+    );
+    if (!exists && tagName.trim() !== "") {
+      setTags([...tags, tagName]);
       setTagInput("");
-      if (!availableTags.includes(tag)) {
-        setAvailableTags([...availableTags, tag]);
+      if (!availableTags.includes(tagName)) {
+        setAvailableTags([...availableTags, tagName]);
       }
     }
   };
 
   const removeTag = (tagToRemove) => {
-    setTags(tags.filter((tag) => tag !== tagToRemove));
+    const toRemoveName =
+      typeof tagToRemove === "string" ? tagToRemove : tagToRemove.name;
+    setTags(
+      tags.filter((tag) => {
+        const tagName = typeof tag === "string" ? tag : tag.name;
+        return tagName !== toRemoveName;
+      })
+    );
   };
 
   const handleThumbnailChange = (e) => {
@@ -96,14 +108,20 @@ function EditPost() {
     data.append("description", formData.description);
     data.append("content", formData.content);
     data.append("published", formData.published);
-    data.append("tags", JSON.stringify(tags));
+
+    // ✅ Enviar solo los nombres de las etiquetas
+    const tagNames = tags.map((tag) =>
+      typeof tag === "string" ? tag : tag.name
+    );
+    data.append("tags", JSON.stringify(tagNames));
+
     if (thumbnail) {
       data.append("thumbnail", thumbnail);
     }
 
     try {
       const response = await fetch(`${web}/api/posts/${id}`, {
-        method: "PUT",
+        method: "PATCH",
         body: data,
         credentials: "include",
       });
@@ -111,8 +129,8 @@ function EditPost() {
       if (!response.ok) throw new Error("Error al actualizar el post");
 
       const result = await response.json();
-      console.log("Post actualizado:", result);
-      navigate(`/view/${id}`);
+      toast.success(result.message);
+      navigate(`/view-post/${id}`);
     } catch (err) {
       console.error(err);
       alert("Error al actualizar el post");
@@ -244,11 +262,11 @@ function EditPost() {
                         key={index}
                         className="bg-dark-accent px-3 py-1 rounded-full text-sm"
                       >
-                        {tag.name}
+                        {typeof tag === "string" ? tag : tag.name}
                         <button
                           type="button"
                           onClick={() => removeTag(tag)}
-                          className="ml-2 text-white hover:text-red-400"
+                          className="ml-2 text-red-400"
                         >
                           <X size={12} />
                         </button>
