@@ -18,6 +18,10 @@ function Home() {
   const [visibleCount, setVisibleCount] = useState(POSTS_PER_PAGE);
   const { isAuthenticated } = useAuth();
 
+  useEffect(() => {
+    document.title = "Sayro - Inicio";
+  }, []);
+
   const fetchPosts = (sort = sortBy, query = "") => {
     const baseUrl =
       sort === "popular"

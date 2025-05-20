@@ -4,7 +4,20 @@ import Post from "../models/Post.js";
 // Obtener todos los tags
 export const getAllTags = async (req, res) => {
   try {
-    const tags = await Tag.find().sort({ name: 1 });
+    const { sortBy, q } = req.query;
+
+    const query = {};
+    if (q) {
+      query.name = { $regex: q, $options: "i" };
+    }
+
+    let sort = {};
+    if (sortBy === "recent") sort = { createdAt: -1 };
+    else if (sortBy === "old") sort = { createdAt: 1 };
+    else sort = { name: 1 };
+
+    const tags = await Tag.find(query).sort(sort);
+
     res.json(tags);
   } catch (err) {
     console.error("Error al obtener los tags:", err);

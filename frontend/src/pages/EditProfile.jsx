@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Nav from "../components/Nav";
 import Footer from "../components/Footer";
@@ -9,6 +9,10 @@ import { web } from "../utils/routes";
 function EditProfile() {
   const { user } = useAuth();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    document.title = "Sayro - Editar perfil";
+  }, []);
 
   const [formData, setFormData] = useState({
     username: user?.username || "",

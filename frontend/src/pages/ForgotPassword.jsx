@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import { web } from "../utils/routes";
 import Nav from "../components/Nav";
@@ -12,6 +12,10 @@ function ForgotPassword() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+
+    useEffect(() => {
+      document.title = "Sayro - Contraseña olvidada";
+    }, []);
 
     try {
       const res = await fetch(`${web}/api/auth/forgot-password`, {

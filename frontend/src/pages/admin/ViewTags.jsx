@@ -1,61 +1,51 @@
 import Nav from "../../components/Nav";
 import Footer from "../../components/Footer";
 import { useEffect, useState } from "react";
-import {
-  FileDown,
-  Search,
-  X,
-  Pencil,
-  ThumbsUp,
-  MessageCircle,
-} from "lucide-react";
-import { Eye } from "lucide-react";
+import { FileDown, Search, X, Tag as TagIcon, Clock, Eye } from "lucide-react";
 import { web } from "../../utils/routes";
 import { useAuth } from "../../context/AuthContext";
 
-function ViewPosts() {
-  const [posts, setPosts] = useState([]);
+function ViewTags() {
+  const [tags, setTags] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [sortBy, setSortBy] = useState("all");
   const { isAuthenticated } = useAuth();
 
-  const fetchPosts = async () => {
+  const fetchTags = async () => {
     try {
       const params = new URLSearchParams();
       if (searchTerm) params.append("q", searchTerm);
       if (sortBy === "recent" || sortBy === "old")
         params.append("sortBy", sortBy);
 
-      const url = `${web}/api/posts?${params.toString()}`;
+      const url = `${web}/api/tags?${params.toString()}`;
       const res = await fetch(url);
       const data = await res.json();
-      setPosts(data);
+      setTags(data);
     } catch (error) {
-      console.error("Error al obtener posts:", error);
+      console.error("Error al obtener tags:", error);
     }
   };
 
   useEffect(() => {
-    document.title = "Sayro - Ver posts";
+    document.title = "Sayro - Ver Tags";
   }, []);
 
   useEffect(() => {
-    fetchPosts();
+    fetchTags();
   }, [searchTerm, sortBy]);
 
-  const recentPosts = posts.filter((post) => {
-    const created = new Date(post.createdAt);
+  const recentTags = tags.filter((tag) => {
+    const created = new Date(tag.createdAt);
     const lastWeek = new Date();
     lastWeek.setDate(lastWeek.getDate() - 7);
     return created > lastWeek;
   });
 
-  const handleClearSearch = () => {
-    setSearchTerm("");
-  };
+  const handleClearSearch = () => setSearchTerm("");
 
   const handleExportClick = () => {
-    console.log(posts);
+    console.log(tags);
   };
 
   return (
@@ -63,35 +53,26 @@ function ViewPosts() {
       <Nav />
       <div className="container mx-auto py-10 px-4 md:px-8">
         <h1 className="text-3xl sm:text-4xl font-bold text-dark-gold mb-8 text-center">
-          Panel de Publicaciones
+          Panel de Etiquetas
         </h1>
 
         {/* Estadísticas */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 mb-10">
           <div className="bg-dark-background border border-dark-border rounded-xl p-4 sm:p-6 flex items-center gap-4">
-            <Pencil className="w-8 h-8 sm:w-10 sm:h-10 text-dark-gold" />
+            <TagIcon className="w-8 h-8 sm:w-10 sm:h-10 text-dark-gold" />
             <div>
-              <p className="text-sm text-dark-muted">Total de publicaciones</p>
+              <p className="text-sm text-dark-muted">Total de etiquetas</p>
               <p className="text-xl sm:text-2xl font-bold text-dark-light">
-                {posts.length}
+                {tags.length}
               </p>
             </div>
           </div>
           <div className="bg-dark-background border border-dark-border rounded-xl p-4 sm:p-6 flex items-center gap-4">
-            <Search className="w-8 h-8 sm:w-10 sm:h-10 text-dark-gold" />
+            <Clock className="w-8 h-8 sm:w-10 sm:h-10 text-dark-gold" />
             <div>
-              <p className="text-sm text-dark-muted">Publicaciones recientes</p>
+              <p className="text-sm text-dark-muted">Etiquetas recientes</p>
               <p className="text-xl sm:text-2xl font-bold text-dark-light">
-                {recentPosts.length}
-              </p>
-            </div>
-          </div>
-          <div className="bg-dark-background border border-dark-border rounded-xl p-4 sm:p-6 flex items-center gap-4">
-            <ThumbsUp className="w-8 h-8 sm:w-10 sm:h-10 text-dark-gold" />
-            <div>
-              <p className="text-sm text-dark-muted">Likes totales</p>
-              <p className="text-xl sm:text-2xl font-bold text-dark-light">
-                {posts.reduce((acc, p) => acc + (p.likes ?? 0), 0)}
+                {recentTags.length}
               </p>
             </div>
           </div>
@@ -102,7 +83,7 @@ function ViewPosts() {
           <button
             onClick={handleExportClick}
             className="flex items-center justify-center gap-2 bg-dark-forest text-dark-gold px-4 py-3 rounded-lg hover:bg-dark-forest/80 transition w-full lg:w-auto"
-            title="Exportar publicaciones"
+            title="Exportar etiquetas"
           >
             <FileDown className="w-5 h-5" />
             <span className="text-sm">Exportar</span>
@@ -115,7 +96,7 @@ function ViewPosts() {
             <div className="relative w-full">
               <input
                 type="text"
-                placeholder="Buscar por título..."
+                placeholder="Buscar por nombre..."
                 className="w-full py-3 px-4 rounded-l-lg border border-dark-border bg-dark-background text-dark-light"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
@@ -140,9 +121,9 @@ function ViewPosts() {
             onChange={(e) => setSortBy(e.target.value)}
             className="py-3 px-4 rounded-lg border border-dark-border bg-dark-background text-dark-light w-full lg:w-auto"
           >
-            <option value="all">Todos</option>
+            <option value="all">Todas</option>
             <option value="recent">Más recientes</option>
-            <option value="old">Más antiguos</option>
+            <option value="old">Más antiguas</option>
           </select>
         </div>
 
@@ -151,32 +132,24 @@ function ViewPosts() {
           <table className="min-w-full text-sm text-dark-light">
             <thead className="bg-dark-background sticky top-0 z-10 text-xs text-dark-muted uppercase tracking-wider">
               <tr>
-                <th className="px-6 py-3 text-left">Título</th>
-                <th className="px-6 py-3 text-left">Autor</th>
-                <th className="px-6 py-3 text-left">Fecha</th>
-                <th className="px-6 py-3 text-center">Likes / Comentarios</th>
+                <th className="px-6 py-3 text-left">Nombre</th>
+                <th className="px-6 py-3 text-left">Fecha de creación</th>
                 <th className="px-6 py-3 text-right">Acción</th>
               </tr>
             </thead>
             <tbody>
-              {posts.map((post) => (
+              {tags.map((tag) => (
                 <tr
-                  key={post._id}
+                  key={tag._id}
                   className="border-t border-dark-border hover:bg-dark-background/40 transition"
                 >
-                  <td className="px-6 py-4 font-medium">{post.title}</td>
+                  <td className="px-6 py-4 font-medium">{tag.name}</td>
                   <td className="px-6 py-4">
-                    {post.author?.username || "Sin autor"}
-                  </td>
-                  <td className="px-6 py-4">
-                    {new Date(post.createdAt).toLocaleDateString()}
-                  </td>
-                  <td className="px-6 py-4 text-center text-dark-gold font-semibold">
-                    👍 {post.likes ?? 0} / 💬 {post.comments?.length ?? 0}
+                    {new Date(tag.createdAt).toLocaleDateString()}
                   </td>
                   <td className="px-6 py-4 text-right">
                     <button
-                      onClick={() => console.log("Ver post", post._id)}
+                      onClick={() => console.log("Ver etiqueta", tag._id)}
                       className="p-2 rounded-full hover:bg-dark-accent/20"
                       title="Ver detalles"
                     >
@@ -195,4 +168,4 @@ function ViewPosts() {
   );
 }
 
-export default ViewPosts;
+export default ViewTags;

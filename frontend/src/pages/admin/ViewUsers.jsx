@@ -29,6 +29,10 @@ function ViewUsers() {
   };
 
   useEffect(() => {
+    document.title = "Sayro - Ver usuarios";
+  }, []);
+
+  useEffect(() => {
     fetchUsers();
   }, [searchTerm, sortBy]);
 

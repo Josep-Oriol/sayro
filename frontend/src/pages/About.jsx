@@ -1,8 +1,13 @@
 import Nav from "../components/Nav";
 import Footer from "../components/Footer";
 import { Code, Palette, Users, Award, Heart } from "lucide-react";
+import { useEffect } from "react";
 
 function About() {
+  useEffect(() => {
+    document.title = "Sayro - Sobre Sayro";
+  }, []);
+
   return (
     <div className="flex flex-col min-h-screen">
       <Nav />

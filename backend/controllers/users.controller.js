@@ -30,16 +30,26 @@ export const getAllUsers = async (req, res) => {
   }
 };
 
-export const getUserById = async (req, res) => {
+export const getUserByUsername = async (req, res) => {
   try {
-    const { id } = req.params;
-    const user = await User.findById(id);
+    const { username } = req.params;
+
+    const user = await User.findOne({ username })
+      .select("_id username createdAt")
+      .populate({
+        path: "likedPosts",
+        select: "title description thumbnail tags likes comments",
+      });
+
     if (!user) {
       return res.status(404).json({ error: "Usuario no encontrado" });
     }
-    res.json(user);
+
+    const posts = await Post.find({ author: user._id });
+
+    res.json({ user, posts });
   } catch (err) {
-    console.log(`Error al obtener el usuario, error: ${err}`);
+    console.error(`Error al obtener el usuario, error: ${err}`);
     res.status(500).json({ error: "Error al obtener el usuario" });
   }
 };

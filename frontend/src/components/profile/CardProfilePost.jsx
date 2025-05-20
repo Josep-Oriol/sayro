@@ -1,25 +1,25 @@
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { ThumbsUp, MessageCircle } from "lucide-react";
 import { useState, useEffect } from "react";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../../context/AuthContext";
 import { toast } from "react-toastify";
-import { web } from "../utils/routes";
+import { web } from "../../utils/routes.js";
 
-function CardPost({ post }) {
+function CardProfilePosts({ post }) {
   const { user } = useAuth();
   const userId = user?._id;
-  const navigate = useNavigate();
 
   const [isLiked, setIsLiked] = useState(false);
   const [likesCount, setLikesCount] = useState(post.likes || 0);
 
   useEffect(() => {
-    if (user?.likedPosts?.includes(post._id)) {
+    if (user?.likedPosts?.some((liked) => liked._id === post._id)) {
       setIsLiked(true);
     }
   }, [user?.likedPosts, post._id]);
 
   const handleLiked = (e) => {
+    e.preventDefault();
     e.stopPropagation();
 
     if (!userId) {
@@ -42,19 +42,10 @@ function CardPost({ post }) {
       .catch(console.error);
   };
 
-  const goToPost = () => {
-    navigate(`/view-post/${post._id}`);
-  };
-
-  const goToProfile = (e) => {
-    e.stopPropagation(); // Evita que también se dispare goToPost
-    navigate(`/view-profile/${post.author.username}`);
-  };
-
   return (
-    <div
-      onClick={goToPost}
-      className="cursor-pointer bg-dark-surface rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300 flex flex-col"
+    <Link
+      to={`/view-post/${post._id}`}
+      className="bg-dark-surface rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300 flex flex-col"
     >
       {post.thumbnail && (
         <img
@@ -65,22 +56,6 @@ function CardPost({ post }) {
       )}
 
       <div className="p-5 flex flex-col flex-grow">
-        <div className="flex items-center gap-2 mb-3">
-          <div className="w-8 h-8 bg-dark-accent rounded-full flex items-center justify-center text-sm font-bold text-dark-surface">
-            {post.author?.username?.[0]?.toUpperCase() || "U"}
-          </div>
-          {post.author?.username ? (
-            <button
-              onClick={goToProfile}
-              className="text-sm text-dark-gold hover:underline"
-            >
-              @{post.author.username}
-            </button>
-          ) : (
-            <span className="text-sm text-dark-light">Usuario</span>
-          )}
-        </div>
-
         <h2 className="text-lg font-bold text-dark-gold line-clamp-2 mb-1">
           {post.title}
         </h2>
@@ -125,8 +100,8 @@ function CardPost({ post }) {
           </div>
         </div>
       </div>
-    </div>
+    </Link>
   );
 }
 
-export default CardPost;
+export default CardProfilePosts;

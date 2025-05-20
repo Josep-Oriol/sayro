@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { web } from "../../utils/routes.js";
 
 function CardLikedPosts({ post }) {
   return (
@@ -9,7 +10,7 @@ function CardLikedPosts({ post }) {
       {/* Imagen */}
       <div className="w-40 h-32 flex-shrink-0">
         <img
-          src={`http://localhost:3000${post.thumbnail}`}
+          src={`${web}${post.thumbnail}`}
           alt={post.title}
           className="w-full h-full object-cover"
         />

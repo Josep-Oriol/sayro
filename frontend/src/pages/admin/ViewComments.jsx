@@ -30,6 +30,10 @@ function ViewComments() {
   };
 
   useEffect(() => {
+    document.title = "Sayro - Ver Comentarios";
+  }, []);
+
+  useEffect(() => {
     fetchComments();
   }, [searchTerm, sortBy]);
 

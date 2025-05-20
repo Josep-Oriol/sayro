@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import Nav from "../components/Nav";
@@ -12,6 +12,10 @@ function ResetPassword() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    document.title = "Sayro - Resetear contraseña";
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

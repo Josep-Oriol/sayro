@@ -1,11 +1,15 @@
 import Nav from "../components/Nav";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { X } from "lucide-react";
 import { web } from "../utils/routes.js";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 function CreatePost() {
+  useEffect(() => {
+    document.title = "Sayro - Crear un post";
+  }, []);
+
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     title: "",

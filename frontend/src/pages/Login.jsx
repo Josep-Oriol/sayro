@@ -5,12 +5,18 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { toast } from "react-toastify";
+import { web } from "../utils/routes.js";
+import { useEffect } from "react";
 
 function Login() {
   const [form, setForm] = useState({
     email: "",
     password: "",
   });
+
+  useEffect(() => {
+    document.title = "Sayro - Login";
+  }, []);
 
   const navigate = useNavigate();
   const { setIsAuthenticated, setUser } = useAuth();
@@ -24,7 +30,7 @@ function Login() {
     e.preventDefault();
 
     try {
-      const res = await fetch("http://localhost:3000/api/auth/login", {
+      const res = await fetch(`${web}/api/auth/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -42,7 +48,7 @@ function Login() {
 
       setIsAuthenticated(true);
 
-      const userRes = await fetch("http://localhost:3000/api/auth/user", {
+      const userRes = await fetch(`${web}/api/auth/user`, {
         credentials: "include",
       });
 

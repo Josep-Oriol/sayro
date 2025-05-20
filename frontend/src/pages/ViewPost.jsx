@@ -26,6 +26,10 @@ function ViewPost() {
   const commentsRef = useRef(null);
 
   useEffect(() => {
+    document.title = "Sayro - Ver post";
+  }, []);
+
+  useEffect(() => {
     setIsLoading(true);
     fetch(`${web}/api/posts/${id}`)
       .then((res) => {

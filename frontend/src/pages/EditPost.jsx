@@ -6,6 +6,10 @@ import { web } from "../utils/routes.js";
 import { toast } from "react-toastify";
 
 function EditPost() {
+  useEffect(() => {
+    document.title = "Sayro - editar post";
+  }, []);
+
   const { id } = useParams();
   const navigate = useNavigate();
 

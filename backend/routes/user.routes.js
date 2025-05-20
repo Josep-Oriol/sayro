@@ -6,6 +6,7 @@ import {
   unsavePost,
   deleteUser,
   updateUser,
+  getUserByUsername,
 } from "../controllers/users.controller.js";
 import { verifyToken } from "../controllers/auth.controller.js";
 
@@ -22,6 +23,8 @@ route.patch("/:userId/unsave/:postId", unsavePost);
 route.delete("/delete", verifyToken, deleteUser);
 
 route.patch("/me", verifyToken, updateUser);
+
+route.get("/profile/:username", getUserByUsername);
 
 route.get("/:id", (req, res) => {
   res.send(`router get user ${req.id}`);

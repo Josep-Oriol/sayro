@@ -5,10 +5,15 @@ import { useAuth } from "../context/AuthContext";
 import ProfileInfo from "../components/profile/ProfileInfo";
 import LikedPosts from "../components/profile/LikedPosts";
 import MisPosts from "../components/profile/MisPosts";
+import { useEffect } from "react";
 
 function Profile() {
   const { user } = useAuth();
   const [section, setSection] = useState("profile");
+
+  useEffect(() => {
+    document.title = "Sayro - Perfil";
+  }, []);
 
   if (!user) return null;
 

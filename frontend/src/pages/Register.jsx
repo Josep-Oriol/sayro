@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Input from "../components/utils/Input";
 import Button from "../components/utils/Button";
 import Nav from "../components/Nav";
@@ -12,6 +12,10 @@ function Register() {
     email: "",
     password: "",
   });
+
+  useEffect(() => {
+    document.title = "Sayro - Registro";
+  }, []);
 
   const navigate = useNavigate();
   const { setIsAuthenticated } = useAuth();

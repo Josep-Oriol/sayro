@@ -4,8 +4,8 @@ import { web } from "../utils/routes.js";
 export const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [user, setUser] = useState(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(undefined);
+  const [user, setUser] = useState(undefined);
 
   useEffect(() => {
     fetch(`${web}/api/auth/user`, {
@@ -19,7 +19,6 @@ export function AuthProvider({ children }) {
         }
 
         const data = await res.json();
-        console.log(data);
         setIsAuthenticated(true);
         setUser(data.user);
       })
