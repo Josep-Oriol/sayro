@@ -84,17 +84,19 @@ export const updateComment = async (req, res) => {
 
 export const deleteComment = async (req, res) => {
   try {
-    const { commentId } = req.body;
+    const { commentId } = req.params;
+
     const comment = await Comment.findByIdAndDelete(commentId);
     if (!comment) {
       return res.status(404).json({ error: "Comentario no encontrado" });
     }
+
     res.json({
       success: true,
       message: "Comentario eliminado exitosamente",
     });
   } catch (err) {
-    console.log(`Error al eliminar el comentario, error: ${err}`);
+    console.log(`Error al eliminar el comentario: ${err}`);
     res.status(500).json({ error: "Error al eliminar el comentario" });
   }
 };
@@ -102,7 +104,7 @@ export const deleteComment = async (req, res) => {
 export const isOwner = async (req, res, next) => {
   try {
     const userId = req.user.id;
-    const { commentId } = req.body;
+    const { commentId } = req.params;
 
     const comment = await Comment.findById(commentId);
     if (!comment) {

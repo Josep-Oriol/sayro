@@ -14,8 +14,8 @@ route.get("/", getAllComments);
 
 route.post("/", verifyToken, createComment);
 
-route.patch("/:id", verifyToken, isOwner, updateComment);
+route.patch("/:commentId", verifyToken, isOwner, updateComment);
 
-route.delete("/:id", verifyToken, isOwner, deleteComment);
+route.delete("/:commentId", verifyToken, isOwner, deleteComment);
 
 export default route;

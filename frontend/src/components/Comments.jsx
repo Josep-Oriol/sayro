@@ -75,7 +75,7 @@ function Comments({ comments = [], postId, user }) {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
-      body: JSON.stringify({ content: editedContent }),
+      body: JSON.stringify({ commentId, content: editedContent }),
     })
       .then((res) => {
         if (!res.ok) throw new Error("No se pudo editar el comentario");
