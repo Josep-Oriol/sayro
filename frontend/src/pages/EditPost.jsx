@@ -61,7 +61,6 @@ function EditPost() {
   };
 
   const handleTagInputChange = (e) => setTagInput(e.target.value);
-
   const handleTagInputKeyDown = (e) => {
     if (e.key === "Enter" && tagInput.trim() !== "") {
       e.preventDefault();
@@ -113,7 +112,6 @@ function EditPost() {
     data.append("content", formData.content);
     data.append("published", formData.published);
 
-    // ✅ Enviar solo los nombres de las etiquetas
     const tagNames = tags.map((tag) =>
       typeof tag === "string" ? tag : tag.name
     );
@@ -137,16 +135,16 @@ function EditPost() {
       navigate(`/view-post/${id}`);
     } catch (err) {
       console.error(err);
-      alert("Error al actualizar el post");
+      toast.error("Error al actualizar el post");
     }
   };
 
   return (
     <>
       <Nav />
-      <div className="container mx-auto py-8 px-4 md:px-0 max-w-4xl">
-        <div className="bg-dark-surface rounded-lg shadow-lg p-6 mb-8 text-dark-light">
-          <h1 className="text-3xl font-bold mb-6 text-center text-dark-gold">
+      <div className="bg-[#121212] mx-auto py-8 px-4 md:px-0 max-w-4xl">
+        <div className="bg-[#1E1E1E] rounded-lg shadow-lg p-6 mb-8 text-[#F5F5F5]">
+          <h1 className="text-3xl font-bold mb-6 text-center text-[#4ADE80]">
             Editar Post
           </h1>
           <form onSubmit={handleSubmit} className="space-y-6">
@@ -166,7 +164,7 @@ function EditPost() {
                     value={formData.title}
                     onChange={handleInputChange}
                     required
-                    className="w-full px-4 py-2 rounded bg-dark-background text-dark-light"
+                    className="w-full px-4 py-2 rounded bg-[#121212] text-[#F5F5F5]"
                   />
                 </div>
 
@@ -184,8 +182,8 @@ function EditPost() {
                     onChange={handleInputChange}
                     rows="3"
                     required
-                    className="w-full px-4 py-2 rounded bg-dark-background text-dark-light"
-                  ></textarea>
+                    className="w-full px-4 py-2 rounded bg-[#121212] text-[#F5F5F5]"
+                  />
                 </div>
 
                 <div>
@@ -202,8 +200,8 @@ function EditPost() {
                     onChange={handleInputChange}
                     rows="6"
                     required
-                    className="w-full px-4 py-2 rounded bg-dark-background text-dark-light"
-                  ></textarea>
+                    className="w-full px-4 py-2 rounded bg-[#121212] text-[#F5F5F5]"
+                  />
                 </div>
               </div>
 
@@ -246,11 +244,13 @@ function EditPost() {
                         />
                         <label
                           htmlFor="thumbnail"
-                          className="cursor-pointer text-dark-gold"
+                          className="cursor-pointer text-[#4ADE80]"
                         >
                           Subir imagen
                         </label>
-                        <p className="text-xs">PNG, JPG, GIF hasta 10MB</p>
+                        <p className="text-xs text-[#A0A0A0]">
+                          PNG, JPG, GIF hasta 10MB
+                        </p>
                       </>
                     )}
                   </div>
@@ -264,13 +264,13 @@ function EditPost() {
                     {tags.map((tag, index) => (
                       <span
                         key={index}
-                        className="bg-dark-accent px-3 py-1 rounded-full text-sm"
+                        className="bg-[#1E2A38] px-3 py-1 rounded-full text-sm flex items-center"
                       >
                         {typeof tag === "string" ? tag : tag.name}
                         <button
                           type="button"
                           onClick={() => removeTag(tag)}
-                          className="ml-2 text-red-400"
+                          className="ml-2 text-red-400 hover:text-red-300"
                         >
                           <X size={12} />
                         </button>
@@ -285,12 +285,12 @@ function EditPost() {
                       onChange={handleTagInputChange}
                       onKeyDown={handleTagInputKeyDown}
                       placeholder="Añadir etiqueta"
-                      className="flex-grow px-4 py-2 bg-dark-background text-dark-light rounded-l"
+                      className="flex-grow px-4 py-2 bg-[#121212] text-[#F5F5F5] rounded-l"
                     />
                     <button
                       type="button"
                       onClick={() => addTag(tagInput.trim().toLowerCase())}
-                      className="px-4 py-2 bg-dark-forest text-dark-gold rounded-r"
+                      className="px-4 py-2 bg-[#1B3B2F] text-[#4ADE80] rounded-r"
                     >
                       Añadir
                     </button>
@@ -316,7 +316,7 @@ function EditPost() {
             <div className="flex justify-end pt-4">
               <button
                 type="submit"
-                className="px-6 py-2.5 bg-dark-forest text-dark-gold rounded-lg"
+                className="px-6 py-2.5 bg-[#1B3B2F] text-[#4ADE80] rounded-lg hover:bg-[#1B3B2F]/80 transition"
               >
                 Actualizar Post
               </button>

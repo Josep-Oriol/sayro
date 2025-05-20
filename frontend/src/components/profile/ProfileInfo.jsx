@@ -4,6 +4,7 @@ import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import { useAuth } from "../../context/AuthContext";
 import { toast } from "react-toastify";
+import { web } from "../../utils/routes.js";
 
 function ProfileInfo({ user }) {
   const { setUser, setIsAuthenticated } = useAuth();
@@ -41,61 +42,61 @@ function ProfileInfo({ user }) {
     : "Desconocida";
 
   return (
-    <div className="bg-dark-surface p-6 rounded-lg shadow-lg">
-      <h2 className="text-2xl font-bold text-dark-gold mb-6">Mi Perfil</h2>
+    <div className="bg-[#1E1E1E] p-6 rounded-lg shadow-lg">
+      <h2 className="text-2xl font-bold text-[#4ADE80] mb-6">Mi Perfil</h2>
 
       <div className="flex flex-col gap-6 mb-8">
         <div>
-          <label className="block text-sm text-dark-light mb-1">
+          <label className="block text-sm text-[#A0A0A0] mb-1">
             Nombre de usuario
           </label>
           <input
             type="text"
             value={user.username}
             readOnly
-            className="w-full px-4 py-2 rounded bg-dark-background text-dark-light border border-dark-border"
+            className="w-full px-4 py-2 rounded bg-[#121212] text-[#F5F5F5] border border-[#2D2D2D]"
           />
         </div>
 
         <div>
-          <label className="block text-sm text-dark-light mb-1">Email</label>
+          <label className="block text-sm text-[#A0A0A0] mb-1">Email</label>
           <input
             type="email"
             value={user.email}
             readOnly
-            className="w-full px-4 py-2 rounded bg-dark-background text-dark-light border border-dark-border"
+            className="w-full px-4 py-2 rounded bg-[#121212] text-[#F5F5F5] border border-[#2D2D2D]"
           />
         </div>
 
         <div>
-          <label className="block text-sm text-dark-light mb-1">Rol</label>
+          <label className="block text-sm text-[#A0A0A0] mb-1">Rol</label>
           <input
             type="text"
             value={user.role}
             readOnly
-            className="w-full px-4 py-2 rounded bg-dark-background text-dark-light border border-dark-border"
+            className="w-full px-4 py-2 rounded bg-[#121212] text-[#F5F5F5] border border-[#2D2D2D]"
           />
         </div>
 
         <div>
-          <label className="block text-sm text-dark-light mb-1">
+          <label className="block text-sm text-[#A0A0A0] mb-1">
             Fecha de creación
           </label>
           <input
             type="text"
             value={formattedDate}
             readOnly
-            className="w-full px-4 py-2 rounded bg-dark-background text-dark-light border border-dark-border"
+            className="w-full px-4 py-2 rounded bg-[#121212] text-[#F5F5F5] border border-[#2D2D2D]"
           />
         </div>
       </div>
 
-      {/* Botones seguros */}
+      {/* Botones de acción */}
       <div className="flex flex-col gap-8">
         <div className="flex flex-wrap gap-4">
           <button
             onClick={handleEditProfile}
-            className="flex items-center gap-2 bg-dark-forest text-dark-gold px-4 py-2 rounded hover:bg-dark-forest/80 transition"
+            className="flex items-center gap-2 bg-[#1B3B2F] text-[#4ADE80] px-4 py-2 rounded hover:bg-[#1B3B2F]/80 transition"
           >
             <Pencil size={18} />
             Editar perfil
@@ -103,7 +104,7 @@ function ProfileInfo({ user }) {
 
           <button
             onClick={handlePasswordReset}
-            className="flex items-center gap-2 bg-dark-background text-dark-light px-4 py-2 rounded hover:bg-dark-accent/50 transition"
+            className="flex items-center gap-2 bg-[#121212] text-[#A0A0A0] px-4 py-2 rounded hover:bg-[#1E2A38]/50 transition"
           >
             <KeyRound size={18} />
             Recuperar contraseña

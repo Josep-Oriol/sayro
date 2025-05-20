@@ -52,41 +52,43 @@ function EditProfile() {
     <>
       <Nav />
       <div className="max-w-2xl mx-auto px-4 py-10">
-        <h1 className="text-3xl font-bold text-dark-gold mb-6 text-center">
+        <h1 className="text-3xl font-bold text-[#4ADE80] mb-6 text-center">
           Editar Perfil
         </h1>
         <form
           onSubmit={handleSubmit}
-          className="space-y-6 bg-dark-surface p-6 rounded-lg shadow-lg text-dark-light"
+          className="space-y-6 bg-[#1E1E1E] p-6 rounded-lg shadow-lg text-[#F5F5F5]"
         >
           <div>
-            <label className="block text-sm mb-1">Nombre de usuario</label>
+            <label className="block text-sm mb-1 text-[#A0A0A0]">
+              Nombre de usuario
+            </label>
             <input
               type="text"
               name="username"
               value={formData.username}
               onChange={handleInputChange}
               required
-              className="w-full px-4 py-2 rounded bg-dark-background text-dark-light"
+              className="w-full px-4 py-2 rounded bg-[#121212] text-[#F5F5F5]"
             />
           </div>
 
           <div>
-            <label className="block text-sm mb-1">Email</label>
+            <label className="block text-sm mb-1 text-[#A0A0A0]">Email</label>
             <input
               type="email"
               name="email"
               value={formData.email}
               onChange={handleInputChange}
               required
-              className="w-full px-4 py-2 rounded bg-dark-background text-dark-light"
+              className="w-full px-4 py-2 rounded bg-[#121212] text-[#F5F5F5]"
             />
           </div>
 
           <div className="text-right">
             <button
               type="submit"
-              className="px-6 py-2.5 bg-dark-forest text-dark-gold rounded-lg"
+              className="px-6 py-2.5 bg-[#1B3B2F] text-[#4ADE80] rounded-lg hover:bg-[#1B3B2F]/80 transition"
             >
               Guardar Cambios
             </button>

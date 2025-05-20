@@ -9,13 +9,13 @@ function ForgotPassword() {
   const [loading, setLoading] = useState(false);
   const [sent, setSent] = useState(false);
 
+  useEffect(() => {
+    document.title = "Sayro - Contraseña olvidada";
+  }, []);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-
-    useEffect(() => {
-      document.title = "Sayro - Contraseña olvidada";
-    }, []);
 
     try {
       const res = await fetch(`${web}/api/auth/forgot-password`, {
@@ -42,13 +42,13 @@ function ForgotPassword() {
     <>
       <Nav />
       <div className="max-w-md mx-auto py-16 px-4">
-        <h1 className="text-3xl font-bold text-center text-dark-gold mb-6">
+        <h1 className="text-3xl font-bold text-center text-[#4ADE80] mb-6">
           Recuperar contraseña
         </h1>
 
         <form
           onSubmit={handleSubmit}
-          className="bg-dark-surface p-6 rounded-lg shadow space-y-6 text-dark-light"
+          className="bg-[#1E1E1E] p-6 rounded-lg shadow space-y-6 text-[#F5F5F5]"
         >
           {sent ? (
             <p className="text-green-400 text-center">
@@ -58,20 +58,22 @@ function ForgotPassword() {
           ) : (
             <>
               <div>
-                <label className="block mb-1 text-sm">Correo electrónico</label>
+                <label className="block mb-1 text-sm text-[#A0A0A0]">
+                  Correo electrónico
+                </label>
                 <input
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  className="w-full px-4 py-2 rounded bg-dark-background text-dark-light border border-dark-border"
                   placeholder="tucorreo@ejemplo.com"
+                  className="w-full px-4 py-2 rounded bg-[#121212] text-[#F5F5F5] border border-[#2D2D2D]"
                 />
               </div>
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-2.5 bg-dark-forest text-dark-gold rounded-lg hover:opacity-90 transition"
+                className="w-full py-2.5 bg-[#1B3B2F] text-[#4ADE80] rounded-lg hover:opacity-90 transition"
               >
                 {loading ? "Enviando..." : "Enviar enlace"}
               </button>

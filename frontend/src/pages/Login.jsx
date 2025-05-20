@@ -1,25 +1,23 @@
 import Nav from "../components/Nav";
 import Input from "../components/utils/Input";
 import Button from "../components/utils/Button";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { toast } from "react-toastify";
 import { web } from "../utils/routes.js";
-import { useEffect } from "react";
+import { Eye, EyeOff } from "lucide-react";
 
 function Login() {
-  const [form, setForm] = useState({
-    email: "",
-    password: "",
-  });
+  const [form, setForm] = useState({ email: "", password: "" });
+  const [showPassword, setShowPassword] = useState(false);
+
+  const navigate = useNavigate();
+  const { setIsAuthenticated, setUser } = useAuth();
 
   useEffect(() => {
     document.title = "Sayro - Login";
   }, []);
-
-  const navigate = useNavigate();
-  const { setIsAuthenticated, setUser } = useAuth();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -32,30 +30,19 @@ function Login() {
     try {
       const res = await fetch(`${web}/api/auth/login`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         credentials: "include",
         body: JSON.stringify(form),
       });
 
       const data = await res.json();
-
-      if (!res.ok) {
-        toast.error("Error al iniciar sesión");
-        throw new Error(data.message || "Error al iniciar sesión");
-      }
+      if (!res.ok) throw new Error(data.message || "Error al iniciar sesión");
 
       setIsAuthenticated(true);
 
       const userRes = await fetch(`${web}/api/auth/user`, {
         credentials: "include",
       });
-
-      if (!userRes.ok) {
-        throw new Error("No se pudo obtener los datos del usuario");
-      }
-
       const userData = await userRes.json();
       setUser(userData.user);
 
@@ -63,19 +50,19 @@ function Login() {
       navigate("/");
     } catch (err) {
       toast.error("Error al iniciar sesión");
-      console.error("Error en login:", err.message);
+      console.error("Login error:", err.message);
     }
   };
 
   return (
     <>
       <Nav />
-      <main className="min-h-screen bg-dark-background flex items-center justify-center px-4">
+      <main className="min-h-screen bg-[#121212] flex items-center justify-center px-4">
         <form
           onSubmit={handleSubmit}
-          className="bg-dark-surface p-8 rounded-xl shadow-lg w-full max-w-sm space-y-6"
+          className="bg-[#1E1E1E] p-8 rounded-xl shadow-lg w-full max-w-sm space-y-6 text-[#F5F5F5]"
         >
-          <h1 className="text-2xl font-bold text-dark-gold text-center">
+          <h1 className="text-2xl font-bold text-[#4ADE80] text-center">
             Iniciar sesión
           </h1>
 
@@ -88,22 +75,40 @@ function Login() {
             placeholder="tucorreo@example.com"
           />
 
-          <Input
-            label="Contraseña"
-            name="password"
-            type="password"
-            value={form.password}
-            onChange={handleChange}
-            placeholder="********"
-          />
+          {/* Campo contraseña con icono */}
+          <div className="relative">
+            <label
+              htmlFor="password"
+              className="block text-sm font-medium mb-1 text-[#A0A0A0]"
+            >
+              Contraseña
+            </label>
+            <input
+              id="password"
+              name="password"
+              type={showPassword ? "text" : "password"}
+              value={form.password}
+              onChange={handleChange}
+              placeholder="********"
+              className="w-full px-4 py-2 rounded bg-[#121212] text-[#F5F5F5] border border-[#2D2D2D]"
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3 top-9 text-[#A0A0A0] hover:text-[#F5F5F5]"
+              tabIndex={-1}
+            >
+              {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+            </button>
+          </div>
 
           <Button type="submit" className="w-full">
             Entrar
           </Button>
 
-          <p className="text-center mt-4 text-sm text-dark-light">
+          <p className="text-center mt-4 text-sm text-[#A0A0A0]">
             ¿No tienes una cuenta?{" "}
-            <Link to="/register" className="text-dark-gold font-semibold">
+            <Link to="/register" className="text-[#4ADE80] font-semibold">
               Regístrate
             </Link>
           </p>

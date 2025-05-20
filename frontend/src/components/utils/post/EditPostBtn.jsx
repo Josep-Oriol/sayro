@@ -29,8 +29,8 @@ function EditPostBtn({ user, id }) {
     >
       <button
         onClick={handlePlusClick}
-        className="bg-dark-forest text-dark-gold p-4 rounded-full shadow-lg hover:bg-dark-forest/80 transition cursor-pointer"
-        aria-label="Crear post"
+        className="bg-[#1B3B2F] text-[#4ADE80] p-4 rounded-full shadow-lg hover:bg-[#1B3B2F]/80 transition cursor-pointer"
+        aria-label="Editar post"
       >
         <Pencil className="w-6 h-6" />
       </button>

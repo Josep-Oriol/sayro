@@ -43,35 +43,32 @@ function ViewTags() {
   });
 
   const handleClearSearch = () => setSearchTerm("");
-
-  const handleExportClick = () => {
-    console.log(tags);
-  };
+  const handleExportClick = () => console.log(tags);
 
   return (
     <>
       <Nav />
       <div className="container mx-auto py-10 px-4 md:px-8">
-        <h1 className="text-3xl sm:text-4xl font-bold text-dark-gold mb-8 text-center">
+        <h1 className="text-3xl sm:text-4xl font-bold text-[#4ADE80] mb-8 text-center">
           Panel de Etiquetas
         </h1>
 
         {/* Estadísticas */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 mb-10">
-          <div className="bg-dark-background border border-dark-border rounded-xl p-4 sm:p-6 flex items-center gap-4">
-            <TagIcon className="w-8 h-8 sm:w-10 sm:h-10 text-dark-gold" />
+          <div className="bg-[#121212] border border-[#2D2D2D] rounded-xl p-4 sm:p-6 flex items-center gap-4">
+            <TagIcon className="w-8 h-8 sm:w-10 sm:h-10 text-[#4ADE80]" />
             <div>
-              <p className="text-sm text-dark-muted">Total de etiquetas</p>
-              <p className="text-xl sm:text-2xl font-bold text-dark-light">
+              <p className="text-sm text-[#A0A0A0]">Total de etiquetas</p>
+              <p className="text-xl sm:text-2xl font-bold text-[#F5F5F5]">
                 {tags.length}
               </p>
             </div>
           </div>
-          <div className="bg-dark-background border border-dark-border rounded-xl p-4 sm:p-6 flex items-center gap-4">
-            <Clock className="w-8 h-8 sm:w-10 sm:h-10 text-dark-gold" />
+          <div className="bg-[#121212] border border-[#2D2D2D] rounded-xl p-4 sm:p-6 flex items-center gap-4">
+            <Clock className="w-8 h-8 sm:w-10 sm:h-10 text-[#4ADE80]" />
             <div>
-              <p className="text-sm text-dark-muted">Etiquetas recientes</p>
-              <p className="text-xl sm:text-2xl font-bold text-dark-light">
+              <p className="text-sm text-[#A0A0A0]">Etiquetas recientes</p>
+              <p className="text-xl sm:text-2xl font-bold text-[#F5F5F5]">
                 {recentTags.length}
               </p>
             </div>
@@ -82,7 +79,7 @@ function ViewTags() {
         <div className="flex flex-col lg:flex-row items-stretch gap-4 mb-8">
           <button
             onClick={handleExportClick}
-            className="flex items-center justify-center gap-2 bg-dark-forest text-dark-gold px-4 py-3 rounded-lg hover:bg-dark-forest/80 transition w-full lg:w-auto"
+            className="flex items-center justify-center gap-2 bg-[#1B3B2F] text-[#4ADE80] px-4 py-3 rounded-lg hover:bg-[#1B3B2F]/80 transition w-full lg:w-auto"
             title="Exportar etiquetas"
           >
             <FileDown className="w-5 h-5" />
@@ -97,7 +94,7 @@ function ViewTags() {
               <input
                 type="text"
                 placeholder="Buscar por nombre..."
-                className="w-full py-3 px-4 rounded-l-lg border border-dark-border bg-dark-background text-dark-light"
+                className="w-full py-3 px-4 rounded-l-lg border border-[#2D2D2D] bg-[#121212] text-[#F5F5F5]"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
@@ -107,11 +104,11 @@ function ViewTags() {
                   onClick={handleClearSearch}
                   className="absolute right-0 top-1/2 -translate-y-1/2 px-3"
                 >
-                  <X className="text-dark-gold" />
+                  <X className="text-[#4ADE80]" />
                 </button>
               )}
             </div>
-            <button className="bg-dark-forest text-dark-gold px-6 rounded-r-lg hover:bg-dark-forest/80 transition">
+            <button className="bg-[#1B3B2F] text-[#4ADE80] px-6 rounded-r-lg hover:bg-[#1B3B2F]/80 transition">
               <Search />
             </button>
           </form>
@@ -119,7 +116,7 @@ function ViewTags() {
           <select
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value)}
-            className="py-3 px-4 rounded-lg border border-dark-border bg-dark-background text-dark-light w-full lg:w-auto"
+            className="py-3 px-4 rounded-lg border border-[#2D2D2D] bg-[#121212] text-[#F5F5F5] w-full lg:w-auto"
           >
             <option value="all">Todas</option>
             <option value="recent">Más recientes</option>
@@ -128,9 +125,9 @@ function ViewTags() {
         </div>
 
         {/* Tabla */}
-        <div className="overflow-x-auto max-h-[500px] overflow-y-auto border border-dark-border rounded-lg">
-          <table className="min-w-full text-sm text-dark-light">
-            <thead className="bg-dark-background sticky top-0 z-10 text-xs text-dark-muted uppercase tracking-wider">
+        <div className="overflow-x-auto max-h-[500px] overflow-y-auto border border-[#2D2D2D] rounded-lg">
+          <table className="min-w-full text-sm text-[#F5F5F5]">
+            <thead className="bg-[#121212] sticky top-0 z-10 text-xs text-[#A0A0A0] uppercase tracking-wider">
               <tr>
                 <th className="px-6 py-3 text-left">Nombre</th>
                 <th className="px-6 py-3 text-left">Fecha de creación</th>
@@ -141,7 +138,7 @@ function ViewTags() {
               {tags.map((tag) => (
                 <tr
                   key={tag._id}
-                  className="border-t border-dark-border hover:bg-dark-background/40 transition"
+                  className="border-t border-[#2D2D2D] hover:bg-[#121212]/40 transition"
                 >
                   <td className="px-6 py-4 font-medium">{tag.name}</td>
                   <td className="px-6 py-4">
@@ -150,10 +147,10 @@ function ViewTags() {
                   <td className="px-6 py-4 text-right">
                     <button
                       onClick={() => console.log("Ver etiqueta", tag._id)}
-                      className="p-2 rounded-full hover:bg-dark-accent/20"
+                      className="p-2 rounded-full hover:bg-[#1E2A38]/20"
                       title="Ver detalles"
                     >
-                      <Eye className="w-5 h-5 text-dark-gold" />
+                      <Eye className="w-5 h-5 text-[#4ADE80]" />
                     </button>
                   </td>
                 </tr>

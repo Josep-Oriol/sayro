@@ -47,14 +47,14 @@ function CardPost({ post }) {
   };
 
   const goToProfile = (e) => {
-    e.stopPropagation(); // Evita que también se dispare goToPost
+    e.stopPropagation();
     navigate(`/view-profile/${post.author.username}`);
   };
 
   return (
     <div
       onClick={goToPost}
-      className="cursor-pointer bg-dark-surface rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300 flex flex-col"
+      className="cursor-pointer bg-[#1E1E1E] rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300 flex flex-col"
     >
       {post.thumbnail && (
         <img
@@ -66,25 +66,25 @@ function CardPost({ post }) {
 
       <div className="p-5 flex flex-col flex-grow">
         <div className="flex items-center gap-2 mb-3">
-          <div className="w-8 h-8 bg-dark-accent rounded-full flex items-center justify-center text-sm font-bold text-dark-surface">
+          <div className="w-8 h-8 bg-[#1E2A38] rounded-full flex items-center justify-center text-sm font-bold text-[#1E1E1E]">
             {post.author?.username?.[0]?.toUpperCase() || "U"}
           </div>
           {post.author?.username ? (
             <button
               onClick={goToProfile}
-              className="text-sm text-dark-gold hover:underline"
+              className="text-sm text-[#4ADE80] hover:underline"
             >
               @{post.author.username}
             </button>
           ) : (
-            <span className="text-sm text-dark-light">Usuario</span>
+            <span className="text-sm text-[#A0A0A0]">Usuario</span>
           )}
         </div>
 
-        <h2 className="text-lg font-bold text-dark-gold line-clamp-2 mb-1">
+        <h2 className="text-lg font-bold text-[#4ADE80] line-clamp-2 mb-1">
           {post.title}
         </h2>
-        <p className="text-sm text-dark-light/80 line-clamp-3 flex-grow">
+        <p className="text-sm text-[#A0A0A0] line-clamp-3 flex-grow">
           {post.description}
         </p>
 
@@ -93,33 +93,33 @@ function CardPost({ post }) {
             {post.tags.slice(0, 3).map((tag, index) => (
               <span
                 key={index}
-                className="text-xs px-2 py-1 bg-dark-forest text-dark-gold rounded-full"
+                className="text-xs px-2 py-1 bg-[#1B3B2F] text-[#4ADE80] rounded-full"
               >
                 {tag.name}
               </span>
             ))}
             {post.tags.length > 3 && (
-              <span className="text-xs px-2 py-1 bg-dark-background text-dark-light/70 rounded-full">
+              <span className="text-xs px-2 py-1 bg-[#121212] text-[#A0A0A0] rounded-full">
                 +{post.tags.length - 3}
               </span>
             )}
           </div>
         )}
 
-        <div className="flex items-center gap-4 border-t pt-3 border-dark-border mt-auto">
+        <div className="flex items-center gap-4 border-t pt-3 border-[#2D2D2D] mt-auto">
           <button
             onClick={handleLiked}
-            className="flex items-center space-x-1 text-dark-light/80 hover:text-dark-gold"
+            className="flex items-center space-x-1 text-[#A0A0A0] hover:text-[#4ADE80]"
           >
             <ThumbsUp
               size={18}
-              className={isLiked ? "text-dark-gold" : ""}
+              className={isLiked ? "text-[#4ADE80]" : ""}
               fill={isLiked ? "currentColor" : "none"}
             />
             <span className="text-sm">{likesCount}</span>
           </button>
 
-          <div className="flex items-center space-x-1 text-dark-light/80">
+          <div className="flex items-center space-x-1 text-[#A0A0A0]">
             <MessageCircle size={18} />
             <span className="text-sm">{post.comments?.length || 0}</span>
           </div>

@@ -9,7 +9,7 @@ const ProtectedRoutes = ({ requiredRole }) => {
 
   if (isAuthenticated === undefined || user === undefined) {
     return (
-      <div className="text-center py-20 text-lg text-dark-light">
+      <div className="text-center py-20 text-lg text-[#A0A0A0]">
         Cargando...
       </div>
     );

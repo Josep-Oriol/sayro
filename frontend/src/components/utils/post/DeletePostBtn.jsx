@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 
 function DeletePostBtn({ postId }) {
   const navigate = useNavigate();
+
   const handleDeleteClick = () => {
     fetch(`${web}/api/posts/${postId}`, {
       method: "DELETE",
@@ -27,8 +28,8 @@ function DeletePostBtn({ postId }) {
     >
       <button
         onClick={handleDeleteClick}
-        className="bg-red-500 text-dark-gold p-4 rounded-full shadow-lg hover:bg-dark-forest/80 transition cursor-pointer"
-        aria-label="Crear post"
+        className="bg-[#EF4444] text-[#F5F5F5] p-4 rounded-full shadow-lg hover:bg-[#DC2626] transition cursor-pointer"
+        aria-label="Eliminar post"
       >
         <Trash className="w-6 h-6 stroke-white" />
       </button>

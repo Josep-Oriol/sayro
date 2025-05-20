@@ -35,9 +35,7 @@ function Comments({ comments = [], postId, user }) {
 
     fetch(`${web}/api/comments`, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: { "Content-Type": "application/json" },
       credentials: "include",
       body: JSON.stringify({ postId, content: commentText }),
     })
@@ -50,7 +48,6 @@ function Comments({ comments = [], postId, user }) {
       })
       .then((data) => {
         toast.success(data.message);
-
         const newComment = {
           content: commentText,
           createdAt: new Date().toISOString(),
@@ -58,15 +55,11 @@ function Comments({ comments = [], postId, user }) {
           author: user._id,
           _id: data.commentId || Date.now(),
         };
-
         setLocalComments((prev) => [newComment, ...prev]);
         setCommentText("");
         setVisibleCount((prev) => prev + 1);
       })
-      .catch((err) => {
-        console.error(err);
-        toast.error(err.message);
-      })
+      .catch((err) => toast.error(err.message))
       .finally(() => setIsSubmitting(false));
   };
 
@@ -80,11 +73,9 @@ function Comments({ comments = [], postId, user }) {
 
     fetch(`${web}/api/comments/${commentId}`, {
       method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: { "Content-Type": "application/json" },
       credentials: "include",
-      body: JSON.stringify({ content: editedContent, commentId }),
+      body: JSON.stringify({ content: editedContent }),
     })
       .then((res) => {
         if (!res.ok) throw new Error("No se pudo editar el comentario");
@@ -100,10 +91,7 @@ function Comments({ comments = [], postId, user }) {
         setEditingIndex(null);
         setEditedContent("");
       })
-      .catch((err) => {
-        console.error(err);
-        toast.error(err.message);
-      });
+      .catch((err) => toast.error(err.message));
   };
 
   const handleDelete = (commentId) => {
@@ -111,11 +99,7 @@ function Comments({ comments = [], postId, user }) {
 
     fetch(`${web}/api/comments/${commentId}`, {
       method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
       credentials: "include",
-      body: JSON.stringify({ commentId }),
     })
       .then((res) => {
         if (!res.ok) throw new Error("No se pudo eliminar el comentario");
@@ -126,28 +110,25 @@ function Comments({ comments = [], postId, user }) {
         toast.success("Comentario eliminado");
         setVisibleCount((prev) => Math.max(prev - 1, COMMENTS_PER_PAGE));
       })
-      .catch((err) => {
-        console.error(err);
-        toast.error(err.message);
-      });
+      .catch((err) => toast.error(err.message));
   };
 
   const remainingChars = MAX_COMMENT_LENGTH - commentText.length;
 
   return (
-    <div className="bg-dark-surface rounded-2xl shadow-lg p-6 md:p-8">
-      <h2 className="text-2xl font-bold mb-6 text-dark-gold">
-        Comentarios ({localComments?.length || 0})
+    <div className="bg-[#1E1E1E] rounded-2xl shadow-lg p-6 md:p-8">
+      <h2 className="text-2xl font-bold mb-6 text-[#4ADE80]">
+        Comentarios ({localComments.length})
       </h2>
 
       {/* Formulario */}
-      <div className="mb-10 border-b border-dark-border pb-6">
-        <h3 className="text-lg font-semibold mb-4 text-dark-light">
+      <div className="mb-10 border-b border-[#2D2D2D] pb-6">
+        <h3 className="text-lg font-semibold mb-4 text-[#A0A0A0]">
           Deja tu opinión
         </h3>
         <form onSubmit={handleSubmitComment}>
           <textarea
-            className="w-full px-4 py-3 border border-dark-border rounded-xl bg-dark-background text-dark-light placeholder:text-dark-light/50 focus:ring-2 focus:ring-dark-gold focus:border-dark-gold transition-all"
+            className="w-full px-4 py-3 border border-[#2D2D2D] rounded-xl bg-[#121212] text-[#F5F5F5] placeholder:text-[#A0A0A0]/50 focus:ring-2 focus:ring-[#4ADE80] focus:border-[#4ADE80] transition-all"
             rows="4"
             placeholder="Escribe tu comentario..."
             value={commentText}
@@ -157,7 +138,7 @@ function Comments({ comments = [], postId, user }) {
           <div className="flex justify-between items-center mt-2">
             <span
               className={`text-sm ${
-                remainingChars < 50 ? "text-red-400" : "text-dark-light/70"
+                remainingChars < 50 ? "text-red-400" : "text-[#A0A0A0]"
               }`}
             >
               {remainingChars} caracteres restantes
@@ -166,8 +147,8 @@ function Comments({ comments = [], postId, user }) {
               type="submit"
               className={`px-6 py-2 rounded-xl transition font-medium flex items-center justify-center gap-2 ${
                 commentText.trim()
-                  ? "bg-dark-forest text-dark-gold hover:bg-dark-forest/80"
-                  : "bg-dark-border text-dark-light cursor-not-allowed"
+                  ? "bg-[#1B3B2F] text-[#4ADE80] hover:bg-[#1B3B2F]/80"
+                  : "bg-[#2D2D2D] text-[#A0A0A0] cursor-not-allowed"
               }`}
               disabled={!commentText.trim() || isSubmitting}
             >
@@ -188,19 +169,19 @@ function Comments({ comments = [], postId, user }) {
               return (
                 <div
                   key={comment._id || index}
-                  className={`flex items-start gap-4 border-b border-dark-border pb-6 last:border-0 ${
-                    isOwn ? "bg-dark-forest/10 rounded-lg px-2 py-2" : ""
+                  className={`flex items-start gap-4 border-b border-[#2D2D2D] pb-6 last:border-0 ${
+                    isOwn ? "bg-[#1B3B2F]/10 rounded-lg px-2 py-2" : ""
                   }`}
                 >
-                  <div className="flex-shrink-0 w-11 h-11 bg-dark-accent text-dark-surface rounded-full flex items-center justify-center text-lg font-bold uppercase">
+                  <div className="flex-shrink-0 w-11 h-11 bg-[#1E2A38] text-[#1E1E1E] rounded-full flex items-center justify-center text-lg font-bold uppercase">
                     {comment.authorName?.charAt(0).toUpperCase() || "U"}
                   </div>
                   <div className="flex-1">
                     <div className="flex flex-col sm:flex-row sm:items-center sm:gap-2 mb-1">
-                      <h4 className="font-semibold text-dark-gold">
+                      <h4 className="font-semibold text-[#4ADE80]">
                         {isOwn ? "Tú" : comment.authorName || "Usuario"}
                       </h4>
-                      <span className="text-xs text-dark-light/50">
+                      <span className="text-xs text-[#A0A0A0]/70">
                         {comment.createdAt
                           ? format(new Date(comment.createdAt), "d MMM yyyy", {
                               locale: es,
@@ -211,7 +192,7 @@ function Comments({ comments = [], postId, user }) {
                     {isEditing ? (
                       <>
                         <textarea
-                          className="w-full px-4 py-2 mt-1 mb-2 rounded-lg bg-dark-background border border-dark-border text-dark-light"
+                          className="w-full px-4 py-2 mt-1 mb-2 rounded-lg bg-[#121212] border border-[#2D2D2D] text-[#F5F5F5]"
                           rows="3"
                           value={editedContent}
                           onChange={(e) => setEditedContent(e.target.value)}
@@ -221,8 +202,8 @@ function Comments({ comments = [], postId, user }) {
                           disabled={editedContent === comment.content}
                           className={`flex items-center gap-2 px-4 py-1 rounded-lg text-sm transition ${
                             editedContent !== comment.content
-                              ? "bg-dark-gold text-dark-surface hover:bg-dark-gold/90"
-                              : "bg-dark-border text-dark-light cursor-not-allowed"
+                              ? "bg-[#4ADE80] text-[#1E1E1E] hover:bg-[#4ADE80]/90"
+                              : "bg-[#2D2D2D] text-[#A0A0A0] cursor-not-allowed"
                           }`}
                         >
                           <Save size={16} />
@@ -230,7 +211,7 @@ function Comments({ comments = [], postId, user }) {
                         </button>
                       </>
                     ) : (
-                      <p className="text-dark-light mt-1">{comment.content}</p>
+                      <p className="text-[#A0A0A0] mt-1">{comment.content}</p>
                     )}
                   </div>
 
@@ -238,7 +219,7 @@ function Comments({ comments = [], postId, user }) {
                     <div className="flex items-center gap-2 mt-1">
                       <button
                         onClick={() => handleEdit(index, comment.content)}
-                        className="text-dark-light hover:text-dark-gold"
+                        className="text-[#A0A0A0] hover:text-[#4ADE80]"
                         title="Editar"
                       >
                         <Pencil size={18} />
@@ -263,7 +244,7 @@ function Comments({ comments = [], postId, user }) {
                 onClick={() =>
                   setVisibleCount((prev) => prev + COMMENTS_PER_PAGE)
                 }
-                className="px-4 py-2 bg-dark-background text-dark-gold border border-dark-border rounded-lg hover:bg-dark-background/80 transition"
+                className="px-4 py-2 bg-[#121212] text-[#4ADE80] border border-[#2D2D2D] rounded-lg hover:bg-[#121212]/80 transition"
               >
                 Ver más comentarios
               </button>
@@ -272,7 +253,7 @@ function Comments({ comments = [], postId, user }) {
         </>
       ) : (
         <div className="text-center py-10">
-          <p className="text-dark-light/60 italic">
+          <p className="text-[#A0A0A0]/60 italic">
             No hay comentarios todavía. ¡Sé el primero en comentar!
           </p>
         </div>

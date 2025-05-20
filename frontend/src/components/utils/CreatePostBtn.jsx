@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { Plus } from "lucide-react";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 function CreatePostBtn({ isAuthenticated }) {
@@ -26,7 +26,7 @@ function CreatePostBtn({ isAuthenticated }) {
     <div className="fixed right-10 bottom-10 flex items-center justify-center z-50">
       <button
         onClick={handlePlusClick}
-        className="bg-dark-forest text-dark-gold p-4 rounded-full shadow-lg hover:bg-dark-forest/80 transition"
+        className="bg-[#1B3B2F] text-[#4ADE80] p-4 rounded-full shadow-lg hover:bg-[#1B3B2F]/80 transition"
         aria-label="Crear post"
       >
         <Plus className="w-6 h-6" />

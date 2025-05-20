@@ -7,12 +7,12 @@ import { format } from "date-fns";
 import { useAuth } from "../context/AuthContext";
 import { es } from "date-fns/locale";
 import EditPostBtn from "../components/utils/post/EditPostBtn";
-import { web } from "../utils/routes.js";
-import { toast } from "react-toastify";
 import DeletePostBtn from "../components/utils/post/DeletePostBtn";
 import IsLoadingPost from "../components/utils/post/IsLoadingPost";
 import ErrorPost from "../components/utils/post/ErrorPost";
 import NoPost from "../components/utils/post/NoPost";
+import { web } from "../utils/routes.js";
+import { toast } from "react-toastify";
 
 function ViewPost() {
   const { id } = useParams();
@@ -48,7 +48,6 @@ function ViewPost() {
       });
   }, [id]);
 
-  // Edit btn
   useEffect(() => {
     if (post && user) {
       setIsOwner(post.author._id === user._id);
@@ -97,7 +96,6 @@ function ViewPost() {
     ? format(new Date(post.createdAt), "d 'de' MMMM 'de' yyyy", { locale: es })
     : "Fecha desconocida";
 
-  // Errores posibles
   if (isLoading) return <IsLoadingPost />;
   if (error) return <ErrorPost error={error} />;
   if (!post) return <NoPost />;
@@ -106,7 +104,7 @@ function ViewPost() {
     <>
       <Nav />
       <div className="container mx-auto py-8 px-4 max-w-5xl">
-        <div className="bg-dark-surface rounded-lg shadow-lg overflow-hidden mb-8">
+        <div className="bg-[#1E1E1E] rounded-lg shadow-lg overflow-hidden mb-8">
           {post.thumbnail && (
             <div className="relative w-full h-80 overflow-hidden">
               <img
@@ -114,38 +112,38 @@ function ViewPost() {
                 alt={post.title}
                 className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-dark-surface via-transparent to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#1E1E1E] via-transparent to-transparent" />
             </div>
           )}
 
           <div className="p-6 md:p-8">
-            <h1 className="text-4xl font-extrabold tracking-tight text-dark-gold mb-4">
+            <h1 className="text-4xl font-extrabold tracking-tight text-[#4ADE80] mb-4">
               {post.title}
             </h1>
 
             <div className="flex flex-wrap items-center gap-3 text-sm mb-6">
-              <span className="flex items-center bg-dark-background px-3 py-1 rounded-full text-dark-light/70">
+              <span className="flex items-center bg-[#121212] px-3 py-1 rounded-full text-[#A0A0A0]">
                 <Calendar size={16} className="mr-1" /> {formattedDate}
               </span>
-              <span className="flex items-center bg-dark-background px-3 py-1 rounded-full text-dark-light/70">
+              <span className="flex items-center bg-[#121212] px-3 py-1 rounded-full text-[#A0A0A0]">
                 <User size={16} className="mr-1" /> {post.author.username}
               </span>
-              <span className="flex items-center bg-dark-background px-3 py-1 rounded-full text-dark-light/70">
+              <span className="flex items-center bg-[#121212] px-3 py-1 rounded-full text-[#A0A0A0]">
                 <ThumbsUp size={16} className="mr-1" /> {likesCount} likes
               </span>
-              <span className="flex items-center bg-dark-background px-3 py-1 rounded-full text-dark-light/70">
+              <span className="flex items-center bg-[#121212] px-3 py-1 rounded-full text-[#A0A0A0]">
                 <MessageCircle size={16} className="mr-1" />{" "}
                 {post.comments?.length || 0} comentarios
               </span>
             </div>
 
-            <p className="text-lg text-dark-light/90 italic border-l-4 border-dark-gold pl-4 mb-6">
+            <p className="text-lg text-[#CCCCCC] italic border-l-4 border-[#4ADE80] pl-4 mb-6">
               {post.description}
             </p>
 
             {post.tags && post.tags.length > 0 && (
               <div className="mb-6">
-                <h3 className="text-sm font-medium text-dark-light/70 mb-2 flex items-center">
+                <h3 className="text-sm font-medium text-[#A0A0A0] mb-2 flex items-center">
                   <Tag size={16} className="mr-1" />
                   Etiquetas
                 </h3>
@@ -153,7 +151,7 @@ function ViewPost() {
                   {post.tags.map((tag, index) => (
                     <span
                       key={index}
-                      className="px-3 py-1 bg-dark-forest text-dark-gold text-sm rounded-full"
+                      className="px-3 py-1 bg-[#1B3B2F] text-[#4ADE80] text-sm rounded-full"
                     >
                       {tag.name || tag}
                     </span>
@@ -162,13 +160,13 @@ function ViewPost() {
               </div>
             )}
 
-            <div className="flex gap-4 pt-4 border-t border-dark-border mt-6">
+            <div className="flex gap-4 pt-4 border-t border-[#2D2D2D] mt-6">
               <button
                 onClick={handleLike}
-                className={`flex items-center gap-2 px-5 py-2 rounded-full border transition${
+                className={`flex items-center gap-2 px-5 py-2 rounded-full border transition ${
                   isLiked
-                    ? " bg-dark-gold/10 text-dark-gold border-dark-gold"
-                    : " text-dark-light hover:bg-dark-background border-dark-border"
+                    ? "bg-[#4ADE80]/10 text-[#4ADE80] border-[#4ADE80]"
+                    : "text-[#A0A0A0] hover:bg-[#121212] border-[#2D2D2D]"
                 }`}
               >
                 <ThumbsUp size={20} fill={isLiked ? "currentColor" : "none"} />
@@ -177,7 +175,7 @@ function ViewPost() {
 
               <button
                 onClick={handleScrollToComments}
-                className="flex items-center gap-2 px-5 py-2 rounded-full border text-dark-light hover:bg-dark-background transition border-dark-border"
+                className="flex items-center gap-2 px-5 py-2 rounded-full border text-[#A0A0A0] hover:bg-[#121212] transition border-[#2D2D2D]"
               >
                 <MessageCircle size={20} />
                 <span>{post.comments?.length || 0} Comentarios</span>
@@ -186,9 +184,9 @@ function ViewPost() {
           </div>
         </div>
 
-        <div className="bg-dark-surface rounded-lg shadow-lg p-6 md:p-8 mb-8">
-          <h2 className="text-xl font-bold mb-4 text-dark-gold">Contenido</h2>
-          <div className="prose prose-invert prose-lg prose-dark max-w-none text-dark-light whitespace-pre-line">
+        <div className="bg-[#1E1E1E] rounded-lg shadow-lg p-6 md:p-8 mb-8">
+          <h2 className="text-xl font-bold mb-4 text-[#4ADE80]">Contenido</h2>
+          <div className="prose prose-invert prose-lg max-w-none text-[#CCCCCC] whitespace-pre-line">
             {post.content}
           </div>
         </div>
