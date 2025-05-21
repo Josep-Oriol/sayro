@@ -112,6 +112,12 @@ function Login() {
               Regístrate
             </Link>
           </p>
+          <p className="text-center mt-4 text-sm text-[#A0A0A0]">
+            ¿No recuerdas la constraseña?{" "}
+            <Link to="/reset-password" className="text-[#4ADE80] font-semibold">
+              Recuperar
+            </Link>
+          </p>
         </form>
       </main>
     </>
