@@ -48,16 +48,33 @@ export const getPostById = async (req, res) => {
 export const createPost = async (req, res) => {
   try {
     const { title, description, content, published } = req.body;
+    console.log(req.body);
     const tags = JSON.parse(req.body.tags || "[]");
+
     const thumbnail = req.file ? `/uploads/${req.file.filename}` : null;
     const author = req.user.id;
+
+    // Buscar o crear las etiquetas
+    const tagIds = [];
+    for (const name of tags) {
+      const tagName = name.toLowerCase();
+      console.log(tagName);
+      let tag = await Tag.findOne({ name: tagName });
+
+      if (!tag) {
+        tag = new Tag({ name: tagName });
+        await tag.save();
+      }
+
+      tagIds.push(tag._id);
+    }
 
     const post = new Post({
       title,
       description,
       content,
       published: published === "true",
-      tags,
+      tags: tagIds,
       thumbnail,
       author,
     });
